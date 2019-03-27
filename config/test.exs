@@ -11,8 +11,8 @@ config :logger, level: :warn
 
 # Configure your database
 config :jeopardy, Jeopardy.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "jeopardy",
+  password: "jeopardy",
   database: "jeopardy_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

@@ -68,4 +68,25 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-import_config "prod.secret.exs"
+get_secret = fn name ->
+  # Secret generation hack by Nat Tuck for CS4550
+  # This function is dedicated to the pubic domain
+  base = Path.expand("~./config/phx-secrets")
+  File.mkdir_p!(base)
+  path = Path.join(base, name)
+  unless File.exists?(path) do
+    secret = Base.encode16(:crypto.strong_rand_bytes(32))
+    File.write!(path, secret)
+  end
+  String.trim(File.read!(path))
+end
+
+config :jeopardy, JeopardyWeb.Endpoint,
+  secret_key_base: get_secret.("key_base");
+
+config :jeopardy, Jeopardy.Repo,
+  username: "jeopardy",
+  password: get_secret.("prod-pass"),
+  database: "jeopardy_prod",
+  pool_size: 15
+
