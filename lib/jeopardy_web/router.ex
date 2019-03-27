@@ -25,5 +25,7 @@ defmodule JeopardyWeb.Router do
 
      resources "/users", UserController, except: [:new, :edit]
      resources "/records", RecordController, except: [:new, :edit]
+
+     post "/auth", AuthController, :authenticate
    end
 end

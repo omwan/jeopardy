@@ -42,6 +42,15 @@ defmodule Jeopardy.Users do
       preload: :records
   end
 
+  def get_user_by_username(username) do
+    Repo.get_by(User, username: username)
+  end
+
+  def authenticate_user(username, password) do
+    Repo.get_by(User, username: username)
+    |> Argon2.check_pass(password)
+  end
+
   @doc """
   Creates a user.
 
