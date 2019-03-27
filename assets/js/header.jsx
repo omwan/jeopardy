@@ -19,7 +19,7 @@ function Header(props) {
     } else {
         sessionInfo = <div className="my-2">
             <p>
-                Logged in as {session.user_id} |&nbsp;
+                Logged in as {session.username} |&nbsp;
                 <a href="javascript:void(0)" onClick={logout}>Logout</a>
             </p>
         </div>
@@ -30,10 +30,7 @@ function Header(props) {
     }
 
     function logout() {
-        dispatch({
-            type: "DELETE_SESSION",
-            data: null
-        })
+        api.deleteSession();
     }
 
     function update(data) {

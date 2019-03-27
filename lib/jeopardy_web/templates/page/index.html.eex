@@ -1,3 +1,7 @@
 <div id="root">
- React component loading...
+    React component loading...
 </div>
+
+<script>
+    window.session = <%= raw Jason.encode!(@session) %>;
+</script>

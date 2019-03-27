@@ -10,16 +10,22 @@ defmodule JeopardyWeb.AuthController do
 
   def authenticate(conn, %{"username" => username, "password" => password}) do
     with {:ok, %User{} = user} <- Users.authenticate_user(username, password) do
-      resp = %{
-        data: %{
-          token: Phoenix.Token.sign(JeopardyWeb.Endpoint, "user_id", user.id),
-          user_id: user.id,
-        }
+      session = %{
+        token: Phoenix.Token.sign(JeopardyWeb.Endpoint, "user_id", user.id),
+        user_id: user.id,
+        username: user.username
       }
 
       conn
+      |> put_session(:session, session)
       |> put_resp_header("content-type", "application/json; charset=UTF-8")
-      |> send_resp(:created, Jason.encode!(resp))
+      |> send_resp(:created, Jason.encode!(%{data: session}))
     end
+  end
+
+  def logout(conn, _params) do
+    conn
+    |> clear_session()
+    |> send_resp(:no_content, "")
   end
 end

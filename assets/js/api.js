@@ -16,6 +16,20 @@ class Server {
             }
         });
     }
+
+    deleteSession() {
+        $.ajax("/api/v1/auth", {
+            method: "DELETE",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: "",
+            success: function() {
+                store.dispatch({
+                    type: "DELETE_SESSION",
+                });
+            }
+        })
+    }
 }
 
 export default new Server();
