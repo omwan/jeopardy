@@ -11,6 +11,8 @@ defmodule JeopardyWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
   end
 
   scope "/", JeopardyWeb do
@@ -25,5 +27,8 @@ defmodule JeopardyWeb.Router do
 
      resources "/users", UserController, except: [:new, :edit]
      resources "/records", RecordController, except: [:new, :edit]
+
+     post "/auth", AuthController, :authenticate
+     delete "/auth", AuthController, :logout
    end
 end
