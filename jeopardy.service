@@ -1,0 +1,16 @@
+[Unit]
+Description=Jeopardy
+
+[Service]
+Type=simple
+User=jeopardy
+Group=jeopardy
+Restart=on-failure
+Environment=MIX_ENV=prod "PORT=4797"
+Environment=LANG=en_US.UTF-8
+
+WorkingDirectory=/home/jeopardy/jeopardy
+ExecStart=/home/jeopardy/jeopardy/start.sh
+
+[Install]
+WantedBy=multi-user.target
