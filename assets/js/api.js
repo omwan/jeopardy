@@ -33,6 +33,11 @@ class Server {
             }
         })
     }
+
+    getQuestion(category, points) {
+        // TODO when card is flipped, get the question for that category+point_value to show client-side
+        console.log("get question, category: " + category + " points: " + points);
+    }
 }
 
 export default new Server();

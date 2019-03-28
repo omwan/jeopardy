@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import _ from 'lodash';
+import $ from 'jquery';
 
 import store from './store';
 import channel from './channel';
 
 import Header from './header';
 import Lobby from './lobby';
+import Board from './board';
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -32,6 +36,7 @@ class Root extends React.Component {
         return <div>
             <Header />
             <Lobby />
+            <Board />
         </div>;
     }
 }
