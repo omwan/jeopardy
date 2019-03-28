@@ -11,9 +11,11 @@ defmodule Jeopardy.Application do
       # Start the Ecto repository
       Jeopardy.Repo,
       # Start the endpoint when the application starts
-      JeopardyWeb.Endpoint
+      JeopardyWeb.Endpoint,
       # Starts a worker by calling: Jeopardy.Worker.start_link(arg)
       # {Jeopardy.Worker, arg},
+      Jeopardy.GameSup,
+      Jeopardy.BackupAgent
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

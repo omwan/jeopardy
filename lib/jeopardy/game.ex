@@ -1,15 +1,25 @@
 defmodule Jeopardy.Game do
-  @doc """
+
+  alias Jeopardy.JeopardyAPI
+  alias Jeopardy.Player
+
   def new do
     %{
-      game_state: "JOINING"      # game_state is one of JOINING, SELECTING, NEXT_QUESTION, RECEIVING
+      game_state: "JOINING",     # game_state is one of JOINING, SELECTING, NEXT_QUESTION, RECEIVING
       turn: "",                  # string corresponding to the username of player who's turn it is
-      board: %{},                # A Board object    
+      board: JeopardyAPI.create_board(),  # A Board object    
       question: %{},             # question category, question value
-      players: %{}               # A Player object
+      players: []                # a list of Player objects
     }
   end
 
+  def add_player(game, player_name) do
+    # TODO add logic related to max player #, avoiding players with duplicate names...
+    player = Player.new(player_name)
+    Map.put(game, :players, [player | game.players])
+  end
+
+  @doc """
   def client_view(game) do
     %{
       game_state: game.game_state,

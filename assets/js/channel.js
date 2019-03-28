@@ -31,6 +31,9 @@ class Channel {
                 .receive("error", resp => {
                     console.log(`Unable to join ${game}`, resp);
                 });
+        
+            // listeners for stuff happening, TODO don't hard-code this here
+            this.channel.on("shout", (msg) => console.log("SHOUT", msg));
         }
     }
 
