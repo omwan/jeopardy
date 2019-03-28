@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import api from './api';
+import api from '../api';
 
 export default function Board(props) {
   // expects board array of this structure (matches that on the server, but will have parts obfuscated)

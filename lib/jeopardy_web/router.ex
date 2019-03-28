@@ -19,6 +19,8 @@ defmodule JeopardyWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/game/:id", PageController, :index
+    get "/users/new", PageController, :index
   end
 
   # Other scopes may use custom stacks.

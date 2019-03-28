@@ -10,7 +10,8 @@ import channel from './channel';
 
 import Header from './header';
 import Lobby from './lobby';
-import Board from './board';
+import Board from './game/board';
+import NewUserForm from './user/new-user';
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -34,9 +35,13 @@ class Root extends React.Component {
 
     render() {
         return <div>
-            <Header />
-            <Lobby />
-            <Board />
+            <Router>
+                <Header />
+                <Route path="/" exact={true} render={() => <Lobby />} />
+                <Route path="/game/:name" exact={true} render={() => <Board />} />
+                {/* TODO user path */}
+                <Route path="/users/new" exact={true} render={() => <Board />} /> 
+            </Router>
         </div>;
     }
 }
