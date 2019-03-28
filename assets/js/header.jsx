@@ -10,9 +10,13 @@ function Header(props) {
 
     if (session == null) {
         sessionInfo = <div className="form-inline my-2">
-            <input type="username" placeholder="username"
+            <input type="text"
+                   className="form-control"
+                   placeholder="username"
                    onChange={(ev) => update({username: ev.target.value})}/>
-            <input type="password" placeholder="password"
+            <input type="password"
+                   className="form-control"
+                   placeholder="password"
                    onChange={(ev) => update({password: ev.target.value})}/>
             <button className="btn btn-secondary" onClick={login}>Login</button>
         </div>;

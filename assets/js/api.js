@@ -1,6 +1,8 @@
 import store from './store';
 import $ from "jquery";
 
+import channel from './channel';
+
 class Server {
     createSession(username, password) {
         $.ajax("/api/v1/auth", {
@@ -13,6 +15,7 @@ class Server {
                     type: "NEW_SESSION",
                     data: response.data
                 });
+                channel.connect(response.data.token);
             }
         });
     }

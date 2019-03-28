@@ -1,18 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
-import $ from 'jquery';
 import {Provider} from 'react-redux';
 
-import api from './api';
 import store from './store';
+import channel from './channel';
 
 import Header from './header';
+import Lobby from './lobby';
 
 export default function root_init(node, store) {
     ReactDOM.render(
         <Provider store={store}>
-            <Root/>
+            <Root />
         </Provider>, node);
 }
 
@@ -25,12 +24,14 @@ class Root extends React.Component {
                 type: 'NEW_SESSION',
                 data: window.session
             });
+            channel.connect(window.session.token);
         }
     }
 
     render() {
         return <div>
-            <Header/>
-        </div>
+            <Header />
+            <Lobby />
+        </div>;
     }
 }

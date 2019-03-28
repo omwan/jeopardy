@@ -22,13 +22,28 @@ function loginForm(state = {username: "", password: ""}, action) {
     }
 }
 
+function gameName(state = false, action) {
+    switch (action.type) {
+        case 'JOIN_GAME':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
+function joinGameInput(state = "", action) {
+    switch (action.type) {
+        case 'UPDATE_GAME_NAME':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function rootReducer(state, action) {
-    console.log("before reducer", state, action);
-
-    let reducer = combineReducers({session, loginForm});
+    let reducer = combineReducers({session, loginForm, gameName, joinGameInput});
     let newState = reducer(state, action);
-
-    console.log("after reducer", newState);
+    console.log(newState);
     return deepFreeze(newState);
 }
 
