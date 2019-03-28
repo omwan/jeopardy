@@ -22,13 +22,18 @@ function loginForm(state = {username: "", password: ""}, action) {
     }
 }
 
+function channelJoined(state = false, action) {
+    switch (action.type) {
+        case 'JOINED_CHANNEL':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function rootReducer(state, action) {
-    console.log("before reducer", state, action);
-
-    let reducer = combineReducers({session, loginForm});
+    let reducer = combineReducers({session, loginForm, channelJoined});
     let newState = reducer(state, action);
-
-    console.log("after reducer", newState);
     return deepFreeze(newState);
 }
 

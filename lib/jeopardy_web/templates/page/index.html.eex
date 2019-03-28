@@ -4,5 +4,4 @@
 
 <script>
     window.session = <%= raw Jason.encode!(@session) %>;
-    window.userToken = "TODO";
 </script>

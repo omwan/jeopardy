@@ -1,7 +1,7 @@
 defmodule JeopardyWeb.GamesChannel do
   use JeopardyWeb, :channel
 
-  def join("games:lobby", payload, socket) do
+  def join("games:" <> game, payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -23,7 +23,8 @@ defmodule JeopardyWeb.GamesChannel do
   end
 
   # Add authorization logic here as required.
-  defp authorized?(_payload) do
-    true
+  defp authorized?(%{"token" => token}) do
+    {status, _message} = Phoenix.Token.verify(JeopardyWeb.Endpoint, "user_id", token, [max_age: 86400])
+    status == :ok
   end
 end
