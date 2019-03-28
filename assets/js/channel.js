@@ -22,16 +22,15 @@ class Channel {
             this.channel = this.socket.channel(`games:${game}`, {token: token});
             this.channel.join()
                 .receive("ok", resp => {
-                    console.log("Joined successfully", resp)
+                    console.log(`Joined ${game} successfully`, resp);
+                    store.dispatch({
+                        type: "JOIN_GAME",
+                        data: game
+                    });
                 })
                 .receive("error", resp => {
-                    console.log("Unable to join", resp)
+                    console.log(`Unable to join ${game}`, resp);
                 });
-
-            store.dispatch({
-                type: "JOINED_CHANNEL",
-                data: true
-            });
         }
     }
 

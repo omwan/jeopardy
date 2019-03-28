@@ -22,9 +22,18 @@ function loginForm(state = {username: "", password: ""}, action) {
     }
 }
 
-function channelJoined(state = false, action) {
+function gameName(state = false, action) {
     switch (action.type) {
-        case 'JOINED_CHANNEL':
+        case 'JOIN_GAME':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
+function joinGameInput(state = "", action) {
+    switch (action.type) {
+        case 'UPDATE_GAME_NAME':
             return action.data;
         default:
             return state;
@@ -32,8 +41,9 @@ function channelJoined(state = false, action) {
 }
 
 function rootReducer(state, action) {
-    let reducer = combineReducers({session, loginForm, channelJoined});
+    let reducer = combineReducers({session, loginForm, gameName, joinGameInput});
     let newState = reducer(state, action);
+    console.log(newState);
     return deepFreeze(newState);
 }
 

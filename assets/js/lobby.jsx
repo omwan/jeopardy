@@ -4,21 +4,33 @@ import {connect} from 'react-redux';
 import channel from './channel';
 
 function Lobby(props) {
-    let {session, dispatch} = props;
+    let {session, joinGameInput, dispatch} = props;
 
-    let joinDemo = function() {
-        channel.join("demo", session.token);
+    let joinGame = function() {
+        channel.join(joinGameInput, session.token);
+    };
+
+    let update = function(event) {
+        dispatch({
+            type: "UPDATE_GAME_NAME",
+            data: event.target.value
+        });
     };
 
     if (session !== null) {
-        return <div>
+        return <div className="row">
+            <input type="text"
+                   className="form-control col-md-4"
+                   placeholder="game name"
+                   onChange={update} />
             <button className="btn btn-primary"
-                    onClick={joinDemo}>
-                Join demo
+                    onClick={joinGame}
+                    disabled={joinGameInput.length === 0}>
+                Join
             </button>
         </div>;
     } else {
-        return <div>
+        return <div className="row">
             Must log in to start a game.
         </div>
     }
@@ -26,7 +38,8 @@ function Lobby(props) {
 
 function stateToProps(state) {
     return {
-        session: state.session
+        session: state.session,
+        joinGameInput: state.joinGameInput
     }
 }
 
