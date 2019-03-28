@@ -11,7 +11,6 @@ import channel from './channel';
 import Header from './header';
 import Lobby from './lobby';
 import Board from './game/board';
-import NewUserForm from './user/new-user';
 
 export default function root_init(node, store) {
     ReactDOM.render(

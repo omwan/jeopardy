@@ -171,7 +171,7 @@ Category.propTypes = {
 };
 
 function Card(props) {
-  return <div className="question-card card" onClick={() => api.getQuestion(props.category, props.points)}>{props.points}</div>;
+  return <div className="question-card card" onClick={() => api.showQuestion(props.category, props.points)}>{props.points}</div>;
 }
 
 Card.propTypes = {

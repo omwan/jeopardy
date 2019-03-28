@@ -24,7 +24,7 @@ defmodule JeopardyWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-   scope "/api/v1", JeopardyWeb do
+  scope "/api/v1", JeopardyWeb do
      pipe_through :api
 
      resources "/users", UserController, except: [:new, :edit]
