@@ -9,10 +9,10 @@ import store from './store';
 
 import Header from './header';
 
-export default function root_init(node, store) {
+export default function root_init(node, store, channel) {
     ReactDOM.render(
         <Provider store={store}>
-            <Root/>
+            <Root channel={channel}/>
         </Provider>, node);
 }
 
@@ -26,6 +26,14 @@ class Root extends React.Component {
                 data: window.session
             });
         }
+
+        props.channel.join()
+            .receive("ok", resp => {
+                console.log("Joined successfully", resp)
+            })
+            .receive("error", resp => {
+                console.log("Unable to join", resp)
+            });
     }
 
     render() {

@@ -3,6 +3,8 @@ defmodule JeopardyWeb.UserSocket do
 
   ## Channels
   # channel "room:*", JeopardyWeb.RoomChannel
+  channel "games:*", JeopardyWeb.GamesChannel
+
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
