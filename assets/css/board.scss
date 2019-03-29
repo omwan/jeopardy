@@ -1,0 +1,21 @@
+.board {
+  display: flex;
+
+  .category {
+    width: 20%;
+  }
+
+  .card {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    min-height: 5.5rem;
+    margin: 4px 2px;
+  }
+
+  .title-card {
+    cursor: default;
+  }
+}

@@ -1,8 +1,11 @@
 defmodule JeopardyWeb.GamesChannel do
   use JeopardyWeb, :channel
 
+  alias Jeopardy.GameServer
+
   def join("games:" <> game, payload, socket) do
     if authorized?(payload) do
+      GameServer.join(game, "user_name") # TODO
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
