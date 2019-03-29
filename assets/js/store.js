@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from 'redux';
+import {createStore, combineReducers} from 'redux';
 import deepFreeze from 'deep-freeze';
 import _ from "lodash";
 
@@ -35,7 +35,7 @@ function gameState(state = null, action) {
     switch (action.type) {
         case 'UPDATE_GAME_STATE':
             return action.data;
-        default: 
+        default:
             return state;
     }
 }
@@ -49,10 +49,21 @@ function joinGameInput(state = "", action) {
     }
 }
 
+function gameNameSubmitted(state = false, action) {
+    switch (action.type) {
+        case 'GAME_NAME_SUBMITTED':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function rootReducer(state, action) {
-    let reducer = combineReducers({session, loginForm, gameName, gameState, joinGameInput});
+    let reducer = combineReducers({
+        session, loginForm, gameName,
+        gameState, joinGameInput, gameNameSubmitted
+    });
     let newState = reducer(state, action);
-    console.log(newState);
     return deepFreeze(newState);
 }
 

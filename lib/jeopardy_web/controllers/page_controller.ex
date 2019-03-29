@@ -3,7 +3,6 @@ defmodule JeopardyWeb.PageController do
 
   def index(conn, _params) do
     session = get_session(conn, :session)
-    game = get_session(conn, :game)
-    render(conn, "index.html", session: session, game: game)
+    render(conn, "index.html", session: session)
   end
 end
