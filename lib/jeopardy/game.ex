@@ -8,7 +8,7 @@ defmodule Jeopardy.Game do
       game_state: "JOINING",     # game_state is one of JOINING, SELECTING, NEXT_QUESTION, RECEIVING
       turn: "",                  # string corresponding to the username of player who's turn it is
       board: JeopardyAPI.create_board(),  # A Board object    
-      question: %{},             # question category, question value
+      question: nil,             # question category, question value
       players: []                # a list of Player objects
     }
   end

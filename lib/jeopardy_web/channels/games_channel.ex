@@ -3,11 +3,9 @@ defmodule JeopardyWeb.GamesChannel do
 
   alias Jeopardy.GameServer
 
-  intercept ["shout"]
-
   def join("games:" <> game, payload, socket) do
     if authorized?(payload) do
-      GameServer.join("test_game", "user_name") # TODO
+      GameServer.join(game, "user_name") # TODO
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -23,7 +21,6 @@ defmodule JeopardyWeb.GamesChannel do
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (games:lobby).
   def handle_in("shout", payload, socket) do
-    IO.puts("SHOUT")
     broadcast socket, "shout", payload
     {:noreply, socket}
   end
