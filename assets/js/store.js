@@ -31,6 +31,15 @@ function gameName(state = false, action) {
     }
 }
 
+function gameState(state = null, action) {
+    switch (action.type) {
+        case 'UPDATE_GAME_STATE':
+            return action.data;
+        default: 
+            return state;
+    }
+}
+
 function joinGameInput(state = "", action) {
     switch (action.type) {
         case 'UPDATE_GAME_NAME':
@@ -41,7 +50,7 @@ function joinGameInput(state = "", action) {
 }
 
 function rootReducer(state, action) {
-    let reducer = combineReducers({session, loginForm, gameName, joinGameInput});
+    let reducer = combineReducers({session, loginForm, gameName, gameState, joinGameInput});
     let newState = reducer(state, action);
     console.log(newState);
     return deepFreeze(newState);

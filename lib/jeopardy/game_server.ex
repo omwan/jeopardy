@@ -47,7 +47,7 @@ defmodule Jeopardy.GameServer do
   def handle_cast({:join, game_name, player_name}, _state) do
     game = Game.add_player(get_game(game_name), player_name)
     BackupAgent.put(game_name, game)
-    broadcast(game, game_name)
+    broadcast(Game.client_view(game), game_name)
     {:noreply, game}
   end
 

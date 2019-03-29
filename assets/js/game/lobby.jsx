@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import channel from './channel';
+import channel from '../channel';
 
 function Lobby(props) {
     let {session, joinGameInput, dispatch} = props;

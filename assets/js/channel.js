@@ -32,8 +32,14 @@ class Channel {
                     console.log(`Unable to join ${game}`, resp);
                 });
         
-            // listeners for stuff happening, TODO don't hard-code this here
-            this.channel.on("shout", (msg) => console.log("SHOUT", msg));
+            // register listeners for stuff happening
+            this.channel.on("shout", (game) => {
+                console.log("SHOUT", game)
+                store.dispatch({
+                    type: "UPDATE_GAME_STATE",
+                    data: game
+                })
+            });
         }
     }
 
