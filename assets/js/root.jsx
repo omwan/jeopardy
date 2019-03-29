@@ -36,10 +36,16 @@ class Root extends React.Component {
         return <div>
             <Router>
                 <Header />
-                <Route path={"/"} exact={true} render={() => <Lobby/>} />
-                <Route path={"/game/:name"} exact={true} render={({match}) => {
-                    return <Board name={match.params.name} />
+                <Route path={"/"} exact={true} render={() => {
+                    store.dispatch({
+                        type: "GAME_NAME_SUBMITTED",
+                        data: false
+                    });
+                    return <Lobby/>;
                 }} />
+                <Route path={"/game/:name"} exact={true}
+                       render={({match}) => <Board name={match.params.name} />
+                } />
             </Router>
         </div>;
     }
