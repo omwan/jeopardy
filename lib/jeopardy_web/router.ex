@@ -19,7 +19,7 @@ defmodule JeopardyWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/game/:id", PageController, :index
+    get "/game/:name", PageController, :index
     get "/users/new", PageController, :index
   end
 

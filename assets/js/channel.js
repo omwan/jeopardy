@@ -31,13 +31,17 @@ class Channel {
                 .receive("error", resp => {
                     console.log(`Unable to join ${game}`, resp);
                 });
-        
+
             // register listeners for stuff happening
             this.channel.on("shout", (game) => {
-                console.log("SHOUT", game)
+                console.log("SHOUT", game);
                 store.dispatch({
                     type: "UPDATE_GAME_STATE",
                     data: game
+                });
+                store.dispatch({
+                    type: "GAME_NAME_SUBMITTED",
+                    data: true
                 })
             });
         }

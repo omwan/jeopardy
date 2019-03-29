@@ -9,7 +9,8 @@ import store from './store';
 import channel from './channel';
 
 import Header from './header';
-import Jeopardy from './game/jeopardy';
+import Board from './game/board';
+import Lobby from "./game/lobby";
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -35,9 +36,16 @@ class Root extends React.Component {
         return <div>
             <Router>
                 <Header />
-                <Route path="/" exact={true} render={() => <Jeopardy />} />
-                {/* TODO user path */}
-                <Route path="/users/new" exact={true} render={() => <Jeopardy />} /> 
+                <Route path={"/"} exact={true} render={() => {
+                    store.dispatch({
+                        type: "GAME_NAME_SUBMITTED",
+                        data: false
+                    });
+                    return <Lobby/>;
+                }} />
+                <Route path={"/game/:name"} exact={true}
+                       render={({match}) => <Board name={match.params.name} />
+                } />
             </Router>
         </div>;
     }
