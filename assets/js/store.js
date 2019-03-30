@@ -2,12 +2,13 @@ import {createStore, combineReducers} from 'redux';
 import deepFreeze from 'deep-freeze';
 import _ from "lodash";
 
-// { message: "", type: <TYPE>}, where <TYPE> is one of: "INFO" "ERROR"
+
 function alert(state = null, action) {
     switch (action.type) {
         case "CLEAR_ALERT":
             return null;
         case "NEW_ALERT":
+            // { message: "", type: <TYPE>}, where <TYPE> is one of: "info" "danger"
             return action.data;
         default:
             return state;

@@ -11,9 +11,7 @@ function Alert(props) {
   }
 
   if (!alert) return false;
-
-  let type = alert.type === "INFO" ? "info" : "danger";
-  return <div className={"alert alert-" + type}>
+  return <div className={"alert alert-" + alert.type}>
     <p>{alert.message}</p>
     <button onClick={clear}>X</button>
   </div>;

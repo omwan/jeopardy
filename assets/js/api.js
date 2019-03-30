@@ -48,7 +48,7 @@ class Server {
                 });
                 store.dispatch({
                     type: "NEW_ALERT",
-                    data: {type: "INFO", message: "Registered new user: " + response.data.username}
+                    data: {type: "info", message: "Registered new user: " + response.data.username}
                 });
             }
         });
