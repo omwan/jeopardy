@@ -1,5 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 export default function UserForm(props) {
   const {title, button, form, onSubmit, update} = props;
@@ -27,5 +28,6 @@ export default function UserForm(props) {
            required />
     </div>
     <input type="submit" value={button} className="btn btn-primary" />
+    <Link to={"/"} className="btn text-primary ml-1">Cancel</Link>
   </form>;
 }
