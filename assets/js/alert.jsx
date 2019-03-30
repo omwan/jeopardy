@@ -13,7 +13,7 @@ function Alert(props) {
   if (!alert) return false;
   return <div className={"alert alert-" + alert.type}>
     <p>{alert.message}</p>
-    <button onClick={clear}>X</button>
+    <button onClick={clear} className="btn">X</button>
   </div>;
 }
 

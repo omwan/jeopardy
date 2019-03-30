@@ -22,17 +22,21 @@ function Lobby(props) {
         if (gameNameSubmitted) {
             return <Redirect to={"/game/demo"}/>;
         } else {
-            return <div className="row">
-                <h2>Start a new game</h2>
-                <input type="text"
-                       className="form-control col-md-4"
-                       placeholder="game name"
-                       onChange={update}/>
-                <button className="btn btn-primary"
-                        onClick={joinGame}
-                        disabled={joinGameInput.length === 0}>
-                    Join
-                </button>
+            return <div>
+                <h2>Start a New Game</h2>
+                <div className="row">
+                    <div className="col form-group form-inline">
+                        <input type="text"
+                               className="form-control col-md-4 mr-1"
+                               placeholder="game name"
+                               onChange={update}/>
+                        <button className="btn btn-primary"
+                                onClick={joinGame}
+                                disabled={joinGameInput.length === 0}>
+                            Join
+                        </button>
+                    </div>
+                </div>
             </div>;
         }
     } else {
