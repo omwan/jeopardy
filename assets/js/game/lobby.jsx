@@ -23,6 +23,7 @@ function Lobby(props) {
             return <Redirect to={"/game/demo"}/>;
         } else {
             return <div className="row">
+                <h2>Start a new game</h2>
                 <input type="text"
                        className="form-control col-md-4"
                        placeholder="game name"
@@ -36,7 +37,7 @@ function Lobby(props) {
         }
     } else {
         return <div className="row">
-            Must log in to start a game.
+            You must log in to start a game.
         </div>
     }
 }
