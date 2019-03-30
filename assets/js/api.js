@@ -36,6 +36,19 @@ class Server {
 
     createUser(username, password) {
         console.log("create user ", username, password);
+        $.ajax("/api/v1/users", {
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({user: {username, password}}),
+            success: function (response) {
+                console.log(response.data);
+                store.dispatch({
+                    type: "UPDATE_NEW_USER_FORM",
+                    data: {username: "", password: ""}
+                });
+            }
+        });
     }
 
     showQuestion(category, points) {
