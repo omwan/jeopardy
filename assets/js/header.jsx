@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 import _ from "lodash";
 
@@ -10,15 +11,16 @@ function Header(props) {
 
     if (session == null) {
         sessionInfo = <div className="form-inline my-2">
-            <input type="text"
-                   className="form-control"
-                   placeholder="username"
+            <input type="email"
+                   className="form-control mr-1"
+                   placeholder="email"
                    onChange={(ev) => update({username: ev.target.value})}/>
             <input type="password"
-                   className="form-control"
+                   className="form-control mr-1"
                    placeholder="password"
                    onChange={(ev) => update({password: ev.target.value})}/>
             <button className="btn btn-secondary" onClick={login}>Login</button>
+            <Link to={"/users/new"} className="ml-3">Register</Link>
         </div>;
     } else {
         sessionInfo = <div className="my-2">

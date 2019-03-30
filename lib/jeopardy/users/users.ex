@@ -67,7 +67,14 @@ defmodule Jeopardy.Users do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+    |> preload_records()
   end
+
+  defp preload_records({:ok, user}) do
+    user = Repo.preload user, [:records]
+    {:ok, user}
+  end
+  defp preload_records(error), do: error
 
   @doc """
   Updates a user.

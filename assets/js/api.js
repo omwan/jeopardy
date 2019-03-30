@@ -34,6 +34,26 @@ class Server {
         })
     }
 
+    createUser(username, password) {
+        console.log("create user ", username, password);
+        $.ajax("/api/v1/users", {
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({user: {username, password}}),
+            success: function (response) {
+                store.dispatch({
+                    type: "UPDATE_NEW_USER_FORM",
+                    data: {username: "", password: ""}
+                });
+                store.dispatch({
+                    type: "NEW_ALERT",
+                    data: {type: "info", message: "Registered new user: " + response.data.username}
+                });
+            }
+        });
+    }
+
     showQuestion(category, points) {
         // TODO when card is flipped, get the question for that category+point_value to show client-side
         console.log("get question, category: " + category + " points: " + points);
