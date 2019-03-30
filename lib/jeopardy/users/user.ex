@@ -15,6 +15,6 @@ defmodule Jeopardy.Users.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :password_hash, :admin])
-    |> validate_required([:username, :password_hash, :admin])
+    |> validate_required([:username, :password_hash])
   end
 end

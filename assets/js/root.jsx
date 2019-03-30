@@ -11,6 +11,7 @@ import channel from './channel';
 import Header from './header';
 import Board from './game/board';
 import Lobby from "./game/lobby";
+import {NewUserForm} from "./user-forms";
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -46,6 +47,7 @@ class Root extends React.Component {
                 <Route path={"/game/:name"} exact={true}
                        render={({match}) => <Board name={match.params.name} />
                 } />
+                <Route path={"/users/new"} exact={true} render={() => <NewUserForm />}/>
             </Router>
         </div>;
     }
