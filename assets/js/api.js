@@ -74,8 +74,12 @@ class Server {
             function(response) {
                 console.log(response.data);
                 store.dispatch({
+                    type: "UPDATE_EDIT_USER_FORM",
+                    data: {username: "", password: ""}
+                });
+                store.dispatch({
                     type: "NEW_ALERT",
-                    data: {type: "info", message: "Updated user " + response.data.username}
+                    data: {type: "info", message: "Updated user: " + response.data.username}
                 });
             }
         );

@@ -28,7 +28,7 @@ function Board(props) {
     return <div>
         <div>
             <Link to={"/"}>
-                <button className="btn btn-primary">Return to lobby</button>
+                <button className="btn btn-primary mb-3">Return to lobby</button>
             </Link>
         </div>
         {board}

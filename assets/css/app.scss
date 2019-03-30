@@ -1,16 +1,5 @@
 /* This file is for your main application css. */
 
 @import "~bootstrap/scss/bootstrap";
+@import "alert.scss";
 @import "board.scss";
-
-.alert {
-  p {
-    margin-bottom: 0;
-  }
-
-  button {
-    color: inherit;
-    float: right;
-    margin-top: -32px;
-  }
-}

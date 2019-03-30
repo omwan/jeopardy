@@ -19,5 +19,8 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Jeopardy questions from before November 26, 2001 have their point values doubled to match current values
   * Jeopardy questions with unknown values are assigned a random point value (200, 400, 600, 800, or 1000)
 
-### User Sessions
+### User Accounts
   * Registering a new user does not immediately log the current user in under that account
+  * Users can only edit their own accounts information
+  * Users must be logged in to edit their accounts
+  * User passwords must be at least 8 characters long, and contain both upper and lower-case characters, as well as at least one number
