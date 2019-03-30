@@ -18,14 +18,13 @@ function _NewUserForm(props) {
     });
   }
 
-  return <form onSubmit={register}>
+  return <form onSubmit={register} className="mb-2">
     <h1>New User</h1>
     <div className="form-group">
       <label htmlFor="username">Email</label>
       <input type="email"
              id="username"
              className="form-control"
-             placeholder="email"
              value={newUserForm.username}
              onChange={(ev) => update({username: ev.target.value})}
              required />
@@ -35,7 +34,6 @@ function _NewUserForm(props) {
     <input type="password"
            id="password"
            className="form-control"
-           placeholder="password"
            value={newUserForm.password}
            onChange={(ev) => update({password: ev.target.value})}
            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 

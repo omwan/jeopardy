@@ -8,6 +8,7 @@ import $ from 'jquery';
 import store from './store';
 import channel from './channel';
 
+import Alert from './alert';
 import Header from './header';
 import Board from './game/board';
 import Lobby from "./game/lobby";
@@ -37,6 +38,7 @@ class Root extends React.Component {
         return <div>
             <Router>
                 <Header />
+                <Alert />
                 <Route path={"/"} exact={true} render={() => {
                     store.dispatch({
                         type: "GAME_NAME_SUBMITTED",

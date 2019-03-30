@@ -42,10 +42,13 @@ class Server {
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify({user: {username, password}}),
             success: function (response) {
-                console.log(response.data);
                 store.dispatch({
                     type: "UPDATE_NEW_USER_FORM",
                     data: {username: "", password: ""}
+                });
+                store.dispatch({
+                    type: "NEW_ALERT",
+                    data: {type: "INFO", message: "Registered new user: " + response.data.username}
                 });
             }
         });

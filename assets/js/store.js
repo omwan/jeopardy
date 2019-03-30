@@ -2,6 +2,18 @@ import {createStore, combineReducers} from 'redux';
 import deepFreeze from 'deep-freeze';
 import _ from "lodash";
 
+// { message: "", type: <TYPE>}, where <TYPE> is one of: "INFO" "ERROR"
+function alert(state = null, action) {
+    switch (action.type) {
+        case "CLEAR_ALERT":
+            return null;
+        case "NEW_ALERT":
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function session(state = null, action) {
     switch (action.type) {
         case "NEW_SESSION":
@@ -70,7 +82,7 @@ function gameNameSubmitted(state = false, action) {
 function rootReducer(state, action) {
     let reducer = combineReducers({
         session, loginForm, gameName,
-        newUserForm,
+        alert, newUserForm,
         gameState, joinGameInput, gameNameSubmitted
     });
 

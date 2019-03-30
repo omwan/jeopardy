@@ -2,3 +2,16 @@
 
 @import "~bootstrap/scss/bootstrap";
 @import "board.scss";
+
+
+
+.alert {
+  p {
+    margin-bottom: 0;
+  }
+
+  button {
+    float: right;
+    margin-top: -40px;
+  }
+}
