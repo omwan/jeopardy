@@ -4,6 +4,16 @@ import $ from "jquery";
 import channel from './channel';
 
 class Server {
+    handleError(err) {
+        store.dispatch({
+            type: "NEW_ALERT",
+            data: { 
+                type: "danger",
+                message: err.responseText
+            }
+        })
+    }
+
     sendPost(path, data, callback) {
         $.ajax(path, {
             // headers: {"X-Auth": token}, // TODO
@@ -12,6 +22,7 @@ class Server {
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify(data),
             success: callback,
+            error: this.handleError
         });
     }
 
@@ -23,6 +34,7 @@ class Server {
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify(data),
             success: callback,
+            error: this.handleError
         });
     }
 
