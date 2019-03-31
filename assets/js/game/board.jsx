@@ -14,7 +14,7 @@ function Board(props) {
         if (session !== null) {
             if (gameState !== null) {
                 return <div className="board">
-                    {_.map(gameState.board, (c, idx) => <Category key={idx} category={c}/>)}
+                    {_.map(gameState.board, (c, name) => <Category key={name} category={c} name={name}/>)}
                 </div>;
             } else {
                 channel.join(name, session.token);
@@ -36,12 +36,12 @@ function Board(props) {
 }
 
 function Category(props) {
-    let name = Object.keys(props.category)[0];
-    let point_values = _.sortBy(_.map(props.category[name], (val) => parseInt(val)));
+    let {name, category} = props;
+    let values = _.sortBy(_.map(category, (value) => parseInt(value)));
 
     return <div className="category">
         <div className="title-card card">{name}</div>
-        {_.map(point_values, (points, idx) => <Card key={idx} category={name} points={points} c/>)}
+        {_.map(values, (points, idx) => <Card key={idx} category={name} points={points} />)}
     </div>
 }
 

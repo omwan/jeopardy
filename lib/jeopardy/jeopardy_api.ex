@@ -9,7 +9,8 @@ defmodule Jeopardy.JeopardyAPI do
     resp = HTTPoison.get!("http://jservice.io/api/random?count=10")
     data = Jason.decode!(resp.body)
     categories = get_categories(@num_categories, data, [])
-    Enum.map(categories, &(translate_category_by_id(&1)))
+    |> Enum.map(&(translate_category_by_id(&1)))
+    |> Enum.reduce(fn x, acc -> Map.merge(x, acc) end)
   end
 
   def translate_category_by_id(id) do
