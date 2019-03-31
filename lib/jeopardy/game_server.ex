@@ -42,6 +42,10 @@ defmodule Jeopardy.GameServer do
     BackupAgent.get(game_name) || Game.new()
   end
 
+  def new_question(game_name, category, value) do
+    GenServer.call(reg(game_name), {:question, game_name, category, value})
+  end
+
   # Server Logic
 
   def handle_cast({:join, game_name, player_name}, _state) do
@@ -49,6 +53,11 @@ defmodule Jeopardy.GameServer do
     BackupAgent.put(game_name, game)
     broadcast(Game.client_view(game), game_name)
     {:noreply, game}
+  end
+
+  def handle_call({:question, game_name, category, value}, _from, _state) do
+    game = Game.new_question(get_game(game_name), category, value)
+    broadcast(game, game_name)
   end
 
   defp broadcast(state, game_name) do

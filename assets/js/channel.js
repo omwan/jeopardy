@@ -48,6 +48,7 @@ class Channel {
     }
 
     push(message, body) {
+        console.log("push", message, body);
         this.channel.push(message, body)
             .receive("ok", function (view) {
                 console.log(view);

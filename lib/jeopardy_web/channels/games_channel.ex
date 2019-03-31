@@ -5,11 +5,18 @@ defmodule JeopardyWeb.GamesChannel do
 
   def join("games:" <> game, payload, socket) do
     if authorized?(payload) do
+      socket = assign(socket, :game, game)
       GameServer.join(game, "user_name") # TODO
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
+  end
+
+  def handle_in("new_question", %{ "category" => category, "value" => value }, socket) do
+    game_name = socket.assigns[:game]
+    GameServer.new_question(game_name, category, value)
+    {:noreply, socket}
   end
 
   # Channels can be used in a request/response fashion

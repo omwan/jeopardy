@@ -99,7 +99,8 @@ class Server {
 
     showQuestion(category, points) {
         // TODO when card is flipped, get the question for that category+point_value to show client-side
-        console.log("get question, category: " + category + " points: " + points);
+        console.log("get question, category: " + category + " value: " + points);
+        channel.push("new_question", {category: category, value: points});
     }
 }
 
