@@ -3,32 +3,41 @@ defmodule Jeopardy.Game do
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
 
+  @num_players 6
+
   def new do
     %{
-      game_state: "JOINING",     # game_state is one of JOINING, SELECTING, NEXT_QUESTION, RECEIVING
-      turn: "",                  # string corresponding to the username of player who's turn it is
-      board: Board.new(),  # A Board object    
-      current_question: nil,     # %{category: "", value: ""}
-      completed: nil,            # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: []                # list of Player objects
+      game_state: "JOINING", # game_state is one of JOINING, SELECTING, ANSWERING, GAME_OVER
+      turn: "",              # string corresponding to the username of player who's turn it is
+      board: Board.new(),    # a Board object    
+      question: nil,         # the current question, %{category: "", value: ""}
+      completed: nil,        # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
+      players: []            # list of Player objects
     }
   end
 
-  def add_player(game, player_name) do
-    # TODO add logic related to max player #, avoiding players with duplicate names...
-    player = Player.new(player_name)
-    Map.put(game, :players, [player | game.players])
-  end
-  
   def client_view(game) do
     %{
-      game_state: game.game_state,
+      game_state: get_game_state(game),
       turn: game.turn,
-      question: game.current_question,
+      question: game.question,
       board: Board.client_view(game.board, game.completed),
       players: Enum.map(game.players, &(Player.client_view(&1)))
     }
   end
+
+  # Joining ----------------------------------------------------------------------------------------
+
+  def add_player(game, player_name) do
+    if can_join?(game, player_name) do
+      player = Player.new(player_name)
+      Map.put(game, :players, [player | game.players])
+    else
+      game
+    end   
+  end
+  
+  # Answering Questions ----------------------------------------------------------------------------
 
   def new_question(game, category, value) do
     game
@@ -48,10 +57,41 @@ defmodule Jeopardy.Game do
       Map.put(game, :game_state, "RECEIVING")
     end
   end
-
-  def game_over?(game) do
-    Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
-  end
   """
+
+  # Game Status ------------------------------------------------------------------------------------
+
+  # game state is one one of:
+  #   JOINING   - waiting for more players to join
+  #   SELECTING - choosing the next question to answer
+  #   ANSWERING - answering the current question
+  #   GAMEOVER  - game is over
+  def get_game_state(game) do
+    cond do
+      game_over?(game) -> "GAMEOVER"
+      answer_time?(game) -> "ANSWERING"
+      enough_players?(game) -> "SELECTING"
+      true -> "JOINING"
+    end
+  end
+
+  def can_join?(game, player_name) do
+    game.game_state == "JOINING" && !enough_players?(game) && !Enum.member?(Enum.map(game.players, &(&1.name)), player_name)
+  end
+
+  def enough_players?(game) do
+    length(game.players) == @num_players
+  end
+
+  def answer_time?(game) do
+    game.question != nil && Enum.all?(game.players, &(Player.answered?(&1)))
+  end
+
+  # TODO
+  def game_over?(game) do
+    false 
+    # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
+  end
+  
   # DO THE JEOPARDY API
 end

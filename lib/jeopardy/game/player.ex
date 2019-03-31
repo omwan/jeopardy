@@ -5,7 +5,7 @@ defmodule Jeopardy.Game.Player do
       name: player_name,
       # phone_number: "",
       score: 0,
-      input: ""
+      answer: ""
     }
   end
 
@@ -14,5 +14,9 @@ defmodule Jeopardy.Game.Player do
       name: player.name,
       score: player.score
     }
+  end
+
+  def answered?(player) do
+    player.answer != ""
   end
 end

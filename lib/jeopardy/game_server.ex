@@ -51,16 +51,17 @@ defmodule Jeopardy.GameServer do
   def handle_cast({:join, game_name, player_name}, _state) do
     game = Game.add_player(get_game(game_name), player_name)
     BackupAgent.put(game_name, game)
-    broadcast(Game.client_view(game), game_name)
+    broadcast(game, game_name)
     {:noreply, game}
   end
 
   def handle_call({:question, game_name, category, value}, _from, _state) do
     game = Game.new_question(get_game(game_name), category, value)
     broadcast(game, game_name)
+    {:reply, game, game}
   end
 
-  defp broadcast(state, game_name) do
-    JeopardyWeb.Endpoint.broadcast("games:" <> game_name, "shout", state)
+  defp broadcast(game, game_name) do
+    JeopardyWeb.Endpoint.broadcast("games:" <> game_name, "shout", Game.client_view(game))
   end
 end

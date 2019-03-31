@@ -32,14 +32,18 @@ defmodule Jeopardy.Game.Board do
         end)
         {category, vals} 
       end)
-    |> Map.new
+    |> Enum.reduce(%{}, fn category, acc -> Map.merge(category, acc) end)
   end
 
   def get_question(board, category, value) do
-    board[category][value][:question]
+    get_category(board, category, value)[:question]
   end
 
   def get_answer(board, category, value) do
-    board[category][value][:answer]
+    get_category(board, category, value)[:answer]
+  end
+
+  defp get_category(board, category, value) do
+    board[category][to_string(value)]
   end
 end
