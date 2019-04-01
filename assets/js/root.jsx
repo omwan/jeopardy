@@ -7,10 +7,11 @@ import $ from 'jquery';
 
 import store from './store';
 import channel from './channel';
+import api from './api';
 
 import Alert from './alert';
 import Header from './header';
-import Board from './game/board';
+import Jeopardy from './game/jeopardy';
 import Lobby from "./game/lobby";
 import NewUserForm from "./user/new-user-form";
 import EditUserForm from "./user/edit-user-form";
@@ -25,14 +26,8 @@ export default function root_init(node, store) {
 class Root extends React.Component {
     constructor(props) {
         super(props);
-
-        if (window.session !== null) {
-            store.dispatch({
-                type: 'NEW_SESSION',
-                data: window.session
-            });
-            channel.connect(window.session.token);
-        }
+        api.fetchSession();
+        api.fetchGame();
     }
 
     render() {
@@ -48,7 +43,7 @@ class Root extends React.Component {
                     return <Lobby/>;
                 }} />
                 <Route path={"/game/:name"} exact={true}
-                       render={({match}) => <Board name={match.params.name} />
+                       render={({match}) => <Jeopardy name={match.params.name} />
                 } />
                 <Route path={"/users/new"} exact={true} render={() => <NewUserForm />}/>
                 <Route path={"/users/:id/edit"} exact={true} 

@@ -4,6 +4,16 @@ import $ from "jquery";
 import channel from './channel';
 
 class Server {
+    fetchPath(path, callback) {
+        $.ajax(path, {
+            method: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: "",
+            success: callback,
+        });
+    }
+
     handleError(err) {
         store.dispatch({
             type: "NEW_ALERT",
@@ -46,6 +56,16 @@ class Server {
         });
     }
 
+    fetchSession() {
+        if (window.session !== null) {
+            store.dispatch({
+                type: 'NEW_SESSION',
+                data: window.session
+            });
+            channel.connect(window.session.token, window.session.username);
+        }
+    }
+
     createSession(username, password) {
         this.sendPost("/api/v1/auth", {username, password}, 
             function (response) {
@@ -53,7 +73,7 @@ class Server {
                     type: "NEW_SESSION",
                     data: response.data
                 });
-                channel.connect(response.data.token);
+                channel.connect(response.data.token, response.data.username);
             }
         );
     }
@@ -84,7 +104,6 @@ class Server {
     updateUser(userid, username, password) {
         this.sendPatch("/api/v1/users/" + userid, {user: {username, password}}, 
             function(response) {
-                console.log(response.data);
                 store.dispatch({
                     type: "UPDATE_EDIT_USER_FORM",
                     data: {username: "", password: ""}
@@ -97,9 +116,14 @@ class Server {
         );
     }
 
+    fetchGame() {
+        if (window.session !== null) {
+            channel.connect(window.session.token, window.session.username);
+        }
+    }
+
     showQuestion(category, points) {
-        // TODO when card is flipped, get the question for that category+point_value to show client-side
-        console.log("get question, category: " + category + " points: " + points);
+        channel.push("new_question", {category: category, value: points});
     }
 }
 

@@ -17,9 +17,9 @@ class Channel {
         console.log("Connected to socket");
     }
 
-    join(game, token) {
+    join(game, token, username) {
         if (this.socket !== null) {
-            this.channel = this.socket.channel(`games:${game}`, {token: token});
+            this.channel = this.socket.channel(`games:${game}`, {token: token, username: username});
             this.channel.join()
                 .receive("ok", resp => {
                     console.log(`Joined ${game} successfully`, resp);
@@ -48,6 +48,7 @@ class Channel {
     }
 
     push(message, body) {
+        console.log("push", message, body);
         this.channel.push(message, body)
             .receive("ok", function (view) {
                 console.log(view);
