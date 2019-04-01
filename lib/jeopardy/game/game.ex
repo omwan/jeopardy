@@ -3,11 +3,10 @@ defmodule Jeopardy.Game do
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
 
-  @num_players 6
+  @num_players 2 # TODO increase this
 
   def new do
     %{
-      game_state: "JOINING", # game_state is one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: "",              # string corresponding to the username of player who's turn it is
       board: Board.new(),    # a Board object    
       question: nil,         # the current question, %{category: "", value: ""}
@@ -18,7 +17,7 @@ defmodule Jeopardy.Game do
 
   def client_view(game) do
     %{
-      game_state: get_game_state(game),
+      game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: game.turn,
       question: game.question,
       board: Board.client_view(game.board, game.completed),
@@ -31,7 +30,8 @@ defmodule Jeopardy.Game do
   def add_player(game, player_name) do
     if can_join?(game, player_name) do
       player = Player.new(player_name)
-      Map.put(game, :players, [player | game.players])
+      game
+      |> Map.put(:players, [player | game.players])
     else
       game
     end   
@@ -76,7 +76,7 @@ defmodule Jeopardy.Game do
   end
 
   def can_join?(game, player_name) do
-    game.game_state == "JOINING" && !enough_players?(game) && !Enum.member?(Enum.map(game.players, &(&1.name)), player_name)
+    get_game_state(game) == "JOINING" && !Enum.member?(Enum.map(game.players, &(&1.name)), player_name)
   end
 
   def enough_players?(game) do

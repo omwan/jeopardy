@@ -14,12 +14,13 @@ function Jeopardy(props) {
   if (!session) {
       body = <div>Must be logged in to view game</div>;
   } else if (!gameState) { 
-      channel.join(name, session.token);
+      channel.join(name, session.token, session.username);
       body = <div>Please refresh the page</div>;
   } else {
       switch (gameState.game_state) {
           case "JOINING":
-              // TODO check that multiple can join the game
+              body = <div>Waiting for more players...</div>;
+              break;
           case "SELECTING":
               body = <Board board={gameState.board} />;
               break;

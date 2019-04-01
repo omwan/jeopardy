@@ -4,9 +4,11 @@ defmodule JeopardyWeb.GamesChannel do
   alias Jeopardy.GameServer
 
   def join("games:" <> game, payload, socket) do
+    username = Map.get(payload, "username")
+
     if authorized?(payload) do
       socket = assign(socket, :game, game)
-      GameServer.join(game, "user_name") # TODO
+      GameServer.join(game, username)
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -33,7 +35,7 @@ defmodule JeopardyWeb.GamesChannel do
   end
 
   # Add authorization logic here as required.
-  defp authorized?(%{"token" => token}) do
+  defp authorized?(%{"token" => token, "username" => _username}) do
     {status, _message} = Phoenix.Token.verify(JeopardyWeb.Endpoint, "user_id", token, [max_age: 86400])
     status == :ok
   end

@@ -62,7 +62,7 @@ class Server {
                 type: 'NEW_SESSION',
                 data: window.session
             });
-            channel.connect(window.session.token);
+            channel.connect(window.session.token, window.session.username);
         }
     }
 
@@ -73,7 +73,7 @@ class Server {
                     type: "NEW_SESSION",
                     data: response.data
                 });
-                channel.connect(response.data.token);
+                channel.connect(response.data.token, response.data.username);
             }
         );
     }
@@ -104,7 +104,6 @@ class Server {
     updateUser(userid, username, password) {
         this.sendPatch("/api/v1/users/" + userid, {user: {username, password}}, 
             function(response) {
-                console.log(response.data);
                 store.dispatch({
                     type: "UPDATE_EDIT_USER_FORM",
                     data: {username: "", password: ""}
@@ -118,7 +117,9 @@ class Server {
     }
 
     fetchGame() {
-        // TODO
+        if (window.session !== null) {
+            channel.connect(window.session.token, window.session.username);
+        }
     }
 
     showQuestion(category, points) {

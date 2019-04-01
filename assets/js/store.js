@@ -80,20 +80,11 @@ function joinGameInput(state = "", action) {
     }
 }
 
-function gameNameSubmitted(state = false, action) {
-    switch (action.type) {
-        case 'GAME_NAME_SUBMITTED':
-            return action.data;
-        default:
-            return state;
-    }
-}
-
 function rootReducer(state, action) {
     let reducer = combineReducers({
         session, loginForm, gameName,
         alert, newUserForm, editUserForm,
-        gameState, joinGameInput, gameNameSubmitted
+        gameState, joinGameInput
     });
 
     let newState = reducer(state, action);
