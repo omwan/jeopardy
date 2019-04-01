@@ -41,7 +41,6 @@ defmodule Jeopardy.Game do
 
   def new_question(game, category, value) do
     game
-    |> Map.put(:game_state, "RECEIVING")
     |> Map.put(:question, Board.get_question(game.board, category, value))
   end
 
@@ -84,7 +83,7 @@ defmodule Jeopardy.Game do
   end
 
   def answer_time?(game) do
-    game.question != nil && Enum.all?(game.players, &(Player.answered?(&1)))
+    game.question != nil && !Enum.all?(game.players, &(Player.answered?(&1)))
   end
 
   # TODO

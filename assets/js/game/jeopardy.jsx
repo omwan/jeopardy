@@ -25,7 +25,8 @@ function Jeopardy(props) {
               body = <Board board={gameState.board} />;
               break;
           case "ANSWERING":
-              body = <div>{gameState.question}</div>;
+              body = <div><h4>Question:<br/>{gameState.question}</h4></div>;
+              // TODO add component to type + submit answers
               break;
           case "GAMEOVER":
               body = <div>GAME OVER</div>;

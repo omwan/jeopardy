@@ -58,10 +58,9 @@ defmodule Jeopardy.GameServer do
   def handle_call({:question, game_name, category, value}, _from, _state) do
     game = Game.new_question(get_game(game_name), category, value)
     update_and_broadcast(game, game_name)
-    {:reply, game, game}
   end
 
-  defp update_and_broadcast(game_name, game) do
+  defp update_and_broadcast(game, game_name) do
     Jeopardy.BackupAgent.put(game_name, game)
     broadcast(game, game_name)
     {:reply, game, game}
