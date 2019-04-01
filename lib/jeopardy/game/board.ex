@@ -6,7 +6,6 @@ defmodule Jeopardy.Game.Board do
     JeopardyAPI.create_board()
   end
 
-
   # Produces object of this shape:
   # { "category1" => ["200", "400", "600", "800", "1000"], "category2" => ["200", "400", "600", "800", "1000"]}
   def client_view(board, nil) do

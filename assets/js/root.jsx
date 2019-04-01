@@ -10,7 +10,7 @@ import channel from './channel';
 
 import Alert from './alert';
 import Header from './header';
-import Board from './game/board';
+import Jeopardy from './game/jeopardy';
 import Lobby from "./game/lobby";
 import NewUserForm from "./user/new-user-form";
 import EditUserForm from "./user/edit-user-form";
@@ -48,7 +48,7 @@ class Root extends React.Component {
                     return <Lobby/>;
                 }} />
                 <Route path={"/game/:name"} exact={true}
-                       render={({match}) => <Board name={match.params.name} />
+                       render={({match}) => <Jeopardy name={match.params.name} />
                 } />
                 <Route path={"/users/new"} exact={true} render={() => <NewUserForm />}/>
                 <Route path={"/users/:id/edit"} exact={true} 
