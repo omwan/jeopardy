@@ -4,6 +4,16 @@ import $ from "jquery";
 import channel from './channel';
 
 class Server {
+    fetchPath(path, callback) {
+        $.ajax(path, {
+            method: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: "",
+            success: callback,
+        });
+    }
+
     handleError(err) {
         store.dispatch({
             type: "NEW_ALERT",
@@ -44,6 +54,16 @@ class Server {
             method: "DELETE",
             success: callback,
         });
+    }
+
+    fetchSession() {
+        if (window.session !== null) {
+            store.dispatch({
+                type: 'NEW_SESSION',
+                data: window.session
+            });
+            channel.connect(window.session.token);
+        }
     }
 
     createSession(username, password) {
@@ -95,6 +115,10 @@ class Server {
                 });
             }
         );
+    }
+
+    fetchGame() {
+        // TODO
     }
 
     showQuestion(category, points) {

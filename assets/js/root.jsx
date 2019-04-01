@@ -7,6 +7,7 @@ import $ from 'jquery';
 
 import store from './store';
 import channel from './channel';
+import api from './api';
 
 import Alert from './alert';
 import Header from './header';
@@ -25,14 +26,8 @@ export default function root_init(node, store) {
 class Root extends React.Component {
     constructor(props) {
         super(props);
-
-        if (window.session !== null) {
-            store.dispatch({
-                type: 'NEW_SESSION',
-                data: window.session
-            });
-            channel.connect(window.session.token);
-        }
+        api.fetchSession();
+        api.fetchGame();
     }
 
     render() {
