@@ -40,8 +40,9 @@ function Lobby(props) {
             </div>;
         }
     } else {
-        return <div className="row">
-            You must log in to start a game.
+        return <div>
+            <h2>Start a New Game</h2>
+            <p>You must log in to start a game.</p>
         </div>
     }
 }

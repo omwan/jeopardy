@@ -44,6 +44,15 @@ function newUserForm(state = {username: "", password: ""}, action) {
     }
 }
 
+function editUserForm(state = {username: "", password: ""}, action) {
+    switch (action.type) {
+        case 'UPDATE_EDIT_USER_FORM':
+            return _.assign({}, state, action.data);
+        default:
+            return state;
+    }
+}
+
 function gameName(state = false, action) {
     switch (action.type) {
         case 'JOIN_GAME':
@@ -83,7 +92,7 @@ function gameNameSubmitted(state = false, action) {
 function rootReducer(state, action) {
     let reducer = combineReducers({
         session, loginForm, gameName,
-        alert, newUserForm,
+        alert, newUserForm, editUserForm,
         gameState, joinGameInput, gameNameSubmitted
     });
 

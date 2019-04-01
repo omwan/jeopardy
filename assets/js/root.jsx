@@ -12,7 +12,8 @@ import Alert from './alert';
 import Header from './header';
 import Board from './game/board';
 import Lobby from "./game/lobby";
-import {NewUserForm} from "./user-forms";
+import NewUserForm from "./user/new-user-form";
+import EditUserForm from "./user/edit-user-form";
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -50,6 +51,8 @@ class Root extends React.Component {
                        render={({match}) => <Board name={match.params.name} />
                 } />
                 <Route path={"/users/new"} exact={true} render={() => <NewUserForm />}/>
+                <Route path={"/users/:id/edit"} exact={true} 
+                       render={({match}) => <EditUserForm id={match.params.id} />}/>
             </Router>
         </div>;
     }
