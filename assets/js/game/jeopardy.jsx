@@ -19,29 +19,36 @@ function Jeopardy(props) {
   } else {
       switch (gameState.game_state) {
           case "JOINING":
-              body = <div>Waiting for more players...</div>;
+              body = <div>
+                      <Link to={"/"}>
+                        <button className="btn btn-primary mb-3">Return to lobby</button>
+                      </Link>
+                      <div>Waiting for more players...</div>
+                    </div>;
               break;
           case "SELECTING":
               body = <Board board={gameState.board} />;
               break;
           case "ANSWERING":
-              body = <div><h4>Question:<br/>{gameState.question}</h4></div>;
+              body = <div className="question"><h4>{gameState.question}</h4></div>;
               // TODO add component to type + submit answers
               break;
           case "GAMEOVER":
-              body = <div>GAME OVER</div>;
-              break
+              body = <div>
+                      <Link to={"/"}>
+                        <button className="btn btn-primary mb-3">Return to lobby</button>
+                      </Link>
+                      <div>GAME OVER</div>
+                    </div>;
+              break;
           default:
               body = <div>Something went wrong</div>;
               break;
       }
   }
 
-  return <div>
-      <Link to={"/"}>
-          <button className="btn btn-primary mb-3">Return to lobby</button>
-      </Link>
-      <h2>Game: {name}</h2>
+  return <div className="game">
+      <h3>Jeopardy Game: {name}</h3>
       {body}
   </div>;
 }

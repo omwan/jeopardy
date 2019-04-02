@@ -3,3 +3,20 @@
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
 @import "board.scss";
+@import "fonts.scss";
+
+
+html, body {
+    background-color: darken(blue, 10%);
+    color: white;
+}
+
+a {
+    color: yellow;
+}
+
+.question {
+    text-align: center;
+    margin-top: 200px;
+    font-family: 'ITC Korinna Std';
+  }
