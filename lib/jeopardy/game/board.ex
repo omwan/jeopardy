@@ -14,7 +14,6 @@ defmodule Jeopardy.Game.Board do
     |> Enum.reduce(%{}, fn category, acc -> Map.merge(category, acc) end)
   end
 
-  # TODO THIS IS UNTESTED
   # Produces object of this shape, with past_questions hidden:
   # { "category1" => ["200", "", "600", "", "1000"], "category2" => ["200", "", "600", "800", "1000"]}
   def client_view(board, past_questions) do
@@ -23,13 +22,9 @@ defmodule Jeopardy.Game.Board do
         vals = Enum.map(values, fn {value, _qa} -> 
           # check if category/value combination appears in past_questions
           cat = Map.get(past_questions, category)
-          if cat && Map.get(cat, value) do
-            ""
-          else
-            value
-          end          
+          if cat && Enum.member?(cat, value), do: "", else: value       
         end)
-        {category, vals} 
+        %{category => vals} 
       end)
     |> Enum.reduce(%{}, fn category, acc -> Map.merge(category, acc) end)
   end

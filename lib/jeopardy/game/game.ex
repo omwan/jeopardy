@@ -7,11 +7,11 @@ defmodule Jeopardy.Game do
 
   def new do
     %{
-      turn: "",              # string corresponding to the username of player who's turn it is
-      board: Board.new(),    # a Board object    
-      question: nil,         # the current question, %{category: "", value: ""}
-      completed: nil,        # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: []            # list of Player objects
+      turn: "",            # username of Player who picks the next question
+      board: Board.new(),  # a Board object    
+      question: nil,       # the current question, %{category: "", value: ""}
+      completed: nil,      # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
+      players: %{}         # map of Player objects, keyed by username
     }
   end
 
@@ -19,10 +19,19 @@ defmodule Jeopardy.Game do
     %{
       game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: game.turn,
-      question: game.question,
+      question: question_client_view(game, game.question),
       board: Board.client_view(game.board, game.completed),
-      players: Enum.map(game.players, &(Player.client_view(&1)))
+      players: players_client_view(game.players)
     }
+  end
+
+  defp players_client_view(players) do
+    Map.new(Enum.map(players, fn {name, p} -> {name, Player.client_view(p)} end))
+  end
+
+  defp question_client_view(_game, nil), do: nil
+  defp question_client_view(game, question) do
+    Board.get_question(game.board, question.category, question.value)
   end
 
   # Joining ----------------------------------------------------------------------------------------
@@ -31,7 +40,7 @@ defmodule Jeopardy.Game do
     if can_join?(game, player_name) do
       player = Player.new(player_name)
       game
-      |> Map.put(:players, [player | game.players])
+      |> Map.put(:players, Map.put(game.players, player_name, player))
     else
       game
     end   
@@ -41,22 +50,57 @@ defmodule Jeopardy.Game do
 
   def new_question(game, category, value) do
     game
-    |> Map.put(:question, Board.get_question(game.board, category, value))
+    |> Map.put(:question, %{ category: category, value: value })
   end
 
-  @doc """
-  def answer_correct?(game, input) do
-    if Question.match?(game.question, input.answer) do
-      updated_players = Enum.map(game.players, &(if(&1.username == input.player) do Map.put(&1, :score, &1.score + game.question.points)  end))
+  def set_answer(game, username, answer) do
+    player = Map.get(game.players, username)
+    players = Map.put(game.players, username, Player.set_answer(player, answer))
+    Map.put(game, :players, players)
+  end
+
+  def check_answer(game, username, answer) do
+    if correct_answer?(game, answer) do
+      question = game.question
+
+      player = Map.get(game.players, username)
+      |> Player.add_to_score(question.value)
+
       game
-      |> Map.put(:game_state, "NEXT_QUESTION")
-      |> Map.put(:turn, input.player)
-      |> Map.put(:players, updated_players)
+      |> Map.put(:turn, username) # user who answers correctly gets to pick next question
+      |> Map.put(:players, Map.put(game.players, username, player))
+      |> Map.put(:completed, update_completed(game.completed, question))
+      |> clear_answers
     else
-      Map.put(game, :game_state, "RECEIVING")
+      # TODO mark that a player has guessed incorrectly and check the next answer??
+      game
     end
   end
-  """
+
+  defp update_completed(nil, question) do
+    %{question.category => [question.value]}
+  end
+  defp update_completed(completed, question) do
+    Map.put(completed, question.category, [question.value | (Map.get(completed, question.category) || [])])
+  end
+
+  def clear_answers(game) do
+    players = game.players
+    |> Enum.map(fn {name, p} -> {name, Player.set_answer(p, "")} end)
+    |> Map.new()
+
+    Map.put(game, :players, players)
+  end
+
+  def correct_answer?(game, answer) do
+    answer = String.downcase(answer)
+    correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
+    |> String.downcase
+
+    IO.puts correct_answer
+    # check if one is a substring of the other ¯\_(ツ)_/¯
+    correct_answer =~ answer || answer =~ correct_answer
+  end
 
   # Game Status ------------------------------------------------------------------------------------
 
@@ -75,19 +119,19 @@ defmodule Jeopardy.Game do
   end
 
   def can_join?(game, player_name) do
-    get_game_state(game) == "JOINING" && !Enum.member?(Enum.map(game.players, &(&1.name)), player_name)
+    get_game_state(game) == "JOINING" && !Map.has_key?(game.players, player_name)
   end
 
   def enough_players?(game) do
-    length(game.players) == @num_players
+    map_size(game.players) == @num_players
   end
 
   def answer_time?(game) do
-    game.question != nil && !Enum.all?(game.players, &(Player.answered?(&1)))
+    game.question != nil && !Enum.any?(game.players, fn {_name, p} -> Player.answered?(p) end)
   end
 
   # TODO
-  def game_over?(game) do
+  def game_over?(_game) do
     false 
     # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
   end
