@@ -11,7 +11,8 @@ defmodule Jeopardy.Game do
       board: Board.new(), # a Board object
       question: nil, # the current question, %{category: "", value: ""}
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: %{}
+      players: %{},
+      active: false
       # map of Player objects, keyed by username
     }
   end
@@ -42,6 +43,15 @@ defmodule Jeopardy.Game do
       player = Player.new(player_name, number)
       game
       |> Map.put(:players, Map.put(game.players, player_name, player))
+    else
+      game
+    end
+  end
+
+  def start_game(game) do
+    if (map_size(game.players) >= @num_players) do
+      game
+      |> Map.put(:active, true)
     else
       game
     end
@@ -125,7 +135,7 @@ defmodule Jeopardy.Game do
   end
 
   def enough_players?(game) do
-    map_size(game.players) == @num_players
+    map_size(game.players) >= @num_players && game.active
   end
 
   def answer_time?(game) do
