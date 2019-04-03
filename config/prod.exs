@@ -14,7 +14,7 @@ config :jeopardy, JeopardyWeb.Endpoint,
   root: ".",
   version: Application.spec(:phoenix_distillery, :vsn),
   http: [:inet6, port: {:system, "PORT"}],
-  url: [host: "jeopardy.TODO.com", port: 80],
+  url: [host: "jeopardy.ovmwan.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
@@ -74,7 +74,7 @@ config :logger, level: :info
 get_secret = fn name ->
   # Secret generation hack by Nat Tuck for CS4550
   # This function is dedicated to the pubic domain
-  base = Path.expand("~./config/phx-secrets")
+  base = Path.expand("~/.config/phx-secrets")
   File.mkdir_p!(base)
   path = Path.join(base, name)
   unless File.exists?(path) do
