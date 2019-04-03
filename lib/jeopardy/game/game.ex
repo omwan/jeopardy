@@ -70,6 +70,7 @@ defmodule Jeopardy.Game do
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
       |> Map.put(:players, Map.put(game.players, username, player))
       |> Map.put(:completed, update_completed(game.completed, question))
+      |> Map.put(:question, nil)
       |> clear_answers
     else
       # TODO mark that a player has guessed incorrectly and check the next answer??
