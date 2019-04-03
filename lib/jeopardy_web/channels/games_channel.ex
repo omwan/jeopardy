@@ -21,6 +21,12 @@ defmodule JeopardyWeb.GamesChannel do
     {:noreply, socket}
   end
 
+  def handle_in("start", _params, socket) do
+    game_name = socket.assigns[:game]
+    GameServer.start_game(game_name)
+    {:noreply, socket}
+  end
+
   def handle_in("answer", %{ "username" => username, "answer" => answer }, socket) do
     game_name = socket.assigns[:game]
     GameServer.check_answer(game_name, username, answer)
