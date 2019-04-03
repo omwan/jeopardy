@@ -80,11 +80,20 @@ function joinGameInput(state = "", action) {
     }
 }
 
+function answerInput(state = "", action) {
+    switch (action.type) {
+        case 'UPDATE_ANSWER':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function rootReducer(state, action) {
     let reducer = combineReducers({
         session, loginForm, gameName,
         alert, newUserForm, editUserForm,
-        gameState, joinGameInput
+        gameState, joinGameInput, answerInput
     });
 
     let newState = reducer(state, action);

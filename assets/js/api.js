@@ -125,6 +125,10 @@ class Server {
     showQuestion(category, points) {
         channel.push("new_question", {category: category, value: points});
     }
+
+    answerQuestion(username, answer) {
+        channel.push("answer", {username: username, answer: answer});
+    }
 }
 
 export default new Server();
