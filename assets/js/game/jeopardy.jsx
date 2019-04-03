@@ -1,10 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import channel from "../channel";
 
 import Board from './board';
-import Lobby from './lobby';
+import AnswerQuestion from './answer-question';
 
 function Jeopardy(props) {
   const {name, session, gameState} = props;
@@ -20,9 +19,6 @@ function Jeopardy(props) {
       switch (gameState.game_state) {
           case "JOINING":
               body = <div>
-                      <Link to={"/"}>
-                        <button className="btn btn-primary mb-3">Return to lobby</button>
-                      </Link>
                       <div>Waiting for more players...</div>
                     </div>;
               break;
@@ -30,19 +26,15 @@ function Jeopardy(props) {
               body = <Board board={gameState.board} />;
               break;
           case "ANSWERING":
-              body = <div className="question"><h4>{gameState.question}</h4></div>;
-              // TODO add component to type + submit answers
+              body = <AnswerQuestion question={gameState.question} />;
               break;
           case "GAMEOVER":
               body = <div>
-                      <Link to={"/"}>
-                        <button className="btn btn-primary mb-3">Return to lobby</button>
-                      </Link>
                       <div>GAME OVER</div>
                     </div>;
               break;
           default:
-              body = <div>Something went wrong</div>;
+              body = <div className="text-danger">Something went wrong</div>;
               break;
       }
   }

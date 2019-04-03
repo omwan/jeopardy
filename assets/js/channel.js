@@ -39,10 +39,6 @@ class Channel {
                     type: "UPDATE_GAME_STATE",
                     data: game
                 });
-                store.dispatch({
-                    type: "GAME_NAME_SUBMITTED",
-                    data: true
-                })
             });
         }
     }
@@ -52,7 +48,6 @@ class Channel {
         this.channel.push(message, body)
             .receive("ok", function (view) {
                 console.log(view);
-                //store.dispatch(...);
             });
     }
 }

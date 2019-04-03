@@ -1,15 +1,12 @@
 /* This file is for your main application css. */
 
+$body-bg: darken(blue, 10%);
+$body-color: white;
+
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
 @import "board.scss";
 @import "fonts.scss";
-
-
-html, body {
-    background-color: darken(blue, 10%);
-    color: white;
-}
 
 a {
     color: yellow;
@@ -19,4 +16,11 @@ a {
     text-align: center;
     margin-top: 200px;
     font-family: 'ITC Korinna Std';
-  }
+}
+
+.submission {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
