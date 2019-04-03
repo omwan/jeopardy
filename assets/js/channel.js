@@ -45,10 +45,25 @@ class Channel {
 
     push(message, body) {
         console.log("push", message, body);
-        this.channel.push(message, body)
-            .receive("ok", function (view) {
-                console.log(view);
-            });
+        switch (message) {
+            case "start":
+                this.channel.push("start", body)
+                    .receive("ok", function (view) {
+                        console.log(view);
+                        store.dispatch({
+                            type: "UPDATE_GAME_STATE",
+                            data: view
+                        })
+                    });
+                break;
+            default:
+                this.channel.push(message, body)
+                    .receive("ok", function (view) {
+                        console.log(view);
+                    });
+                break;
+        }
+
     }
 }
 
