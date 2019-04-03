@@ -97,7 +97,7 @@ function rootReducer(state, action) {
     });
 
     let newState = reducer(state, action);
-    console.log(newState);
+    console.log(newState.gameState);
     return deepFreeze(newState);
 }
 

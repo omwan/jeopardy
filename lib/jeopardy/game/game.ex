@@ -1,5 +1,5 @@
 defmodule Jeopardy.Game do
-  
+
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
 
@@ -7,11 +7,12 @@ defmodule Jeopardy.Game do
 
   def new do
     %{
-      turn: "",            # username of Player who picks the next question
-      board: Board.new(),  # a Board object    
-      question: nil,       # the current question, %{category: "", value: ""}
-      completed: nil,      # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: %{}         # map of Player objects, keyed by username
+      turn: "", # username of Player who picks the next question
+      board: Board.new(), # a Board object
+      question: nil, # the current question, %{category: "", value: ""}
+      completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
+      players: %{}
+      # map of Player objects, keyed by username
     }
   end
 
@@ -36,21 +37,21 @@ defmodule Jeopardy.Game do
 
   # Joining ----------------------------------------------------------------------------------------
 
-  def add_player(game, player_name) do
+  def add_player(game, player_name, number) do
     if can_join?(game, player_name) do
-      player = Player.new(player_name)
+      player = Player.new(player_name, number)
       game
       |> Map.put(:players, Map.put(game.players, player_name, player))
     else
       game
-    end   
+    end
   end
-  
+
   # Answering Questions ----------------------------------------------------------------------------
 
   def new_question(game, category, value) do
     game
-    |> Map.put(:question, %{ category: category, value: value })
+    |> Map.put(:question, %{category: category, value: value})
   end
 
   def set_answer(game, username, answer) do
@@ -64,7 +65,7 @@ defmodule Jeopardy.Game do
       question = game.question
 
       player = Map.get(game.players, username)
-      |> Player.add_to_score(question.value)
+               |> Player.add_to_score(question.value)
 
       game
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
@@ -87,8 +88,8 @@ defmodule Jeopardy.Game do
 
   def clear_answers(game) do
     players = game.players
-    |> Enum.map(fn {name, p} -> {name, Player.set_answer(p, "")} end)
-    |> Map.new()
+              |> Enum.map(fn {name, p} -> {name, Player.set_answer(p, "")} end)
+              |> Map.new()
 
     Map.put(game, :players, players)
   end
@@ -96,7 +97,7 @@ defmodule Jeopardy.Game do
   def correct_answer?(game, answer) do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
-    |> String.downcase
+                     |> String.downcase
 
     IO.puts correct_answer
     # check if one is a substring of the other ¯\_(ツ)_/¯
@@ -133,9 +134,9 @@ defmodule Jeopardy.Game do
 
   # TODO
   def game_over?(_game) do
-    false 
+    false
     # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
   end
-  
+
   # DO THE JEOPARDY API
 end

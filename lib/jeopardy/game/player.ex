@@ -1,9 +1,10 @@
 defmodule Jeopardy.Game.Player do
 
-  def new(player_name) do
+  def new(player_name, number) do
+    IO.inspect(number)
     %{
       name: player_name,
-      # phone_number: "",
+      phone_number: number,
       score: 0,
       answer: ""
     }

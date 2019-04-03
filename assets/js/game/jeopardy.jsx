@@ -9,6 +9,7 @@ function Jeopardy(props) {
   const {name, session, gameState} = props;
 
   let body;
+  let number = window.number;
 
   if (!session) {
       body = <div>Must be logged in to view game</div>;
@@ -19,7 +20,7 @@ function Jeopardy(props) {
       switch (gameState.game_state) {
           case "JOINING":
               body = <div>
-                      <div>Waiting for more players...</div>
+                      <div>Text {name} to {number}</div>
                     </div>;
               break;
           case "SELECTING":
