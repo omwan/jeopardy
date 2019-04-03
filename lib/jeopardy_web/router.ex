@@ -33,5 +33,7 @@ defmodule JeopardyWeb.Router do
 
      post "/auth", AuthController, :authenticate
      delete "/auth", AuthController, :logout
+
+     post "/sms", TwilioController, :receive
    end
 end
