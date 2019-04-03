@@ -34,4 +34,11 @@ defmodule JeopardyWeb.Router do
      post "/auth", AuthController, :authenticate
      delete "/auth", AuthController, :logout
    end
+
+  scope "/api/", JeopardyWeb do
+    pipe_through :api
+    
+    post "/sms", SmsController, :index
+  end
+
 end
