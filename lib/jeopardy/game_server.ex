@@ -46,6 +46,10 @@ defmodule Jeopardy.GameServer do
     GenServer.call(reg(game_name), {:question, game_name, category, value})
   end
 
+  def check_answer(game_name, username, answer) do
+    GenServer.call(reg(game_name), {:answer, game_name, username, answer})
+  end
+
   # Server Logic
 
   def handle_cast({:join, game_name, player_name}, _state) do
@@ -57,6 +61,14 @@ defmodule Jeopardy.GameServer do
 
   def handle_call({:question, game_name, category, value}, _from, _state) do
     game = Game.new_question(get_game(game_name), category, value)
+    update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:answer, game_name, username, answer}, _from, _state) do
+    game = get_game(game_name)
+    # if (game.turn == username) do # TODO
+    |> Game.set_answer(username, answer)
+    |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
 
