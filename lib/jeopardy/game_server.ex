@@ -46,6 +46,11 @@ defmodule Jeopardy.GameServer do
     BackupAgent.get(game_name) || Game.new()
   end
 
+  def check_state(game_name) do
+    game = get_game(game_name)
+    Jeopardy.Game.get_game_state(game)
+  end
+
   def new_player(game_name, username, number) do
     GenServer.call(reg(game_name), {:new_player, game_name, username, number})
   end

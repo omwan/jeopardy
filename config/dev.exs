@@ -69,7 +69,7 @@ config :phoenix, :plug_init_mode, :runtime
 get_secret = fn name ->
   # Secret generation hack by Nat Tuck for CS4550
   # This function is dedicated to the pubic domain
-  base = Path.expand("~/.config/phx-secrets")
+  base = Path.expand("~./config/phx-secrets")
   File.mkdir_p!(base)
   path = Path.join(base, name)
   unless File.exists?(path) do
@@ -83,6 +83,7 @@ end
 config :jeopardy, Jeopardy.Repo,
   username: "jeopardy",
   password: get_secret.("dev-pass"),
+  #password: "jeopardy",
   database: "jeopardy_dev",
   hostname: "localhost",
   pool_size: 10
