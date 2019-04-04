@@ -1,0 +1,17 @@
+.players {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.player {
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: .5rem;
+  text-align: center;
+  min-width: 18%;
+
+  p {
+    margin-bottom: 0;
+  }
+}

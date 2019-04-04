@@ -4,18 +4,28 @@ import channel from "../channel";
 
 import Board from './board';
 import AnswerQuestion from './answer-question';
+import Players from './players';
 
 function Jeopardy(props) {
     const {name, gameName, session, gameState} = props;
 
     let body;
-    let players;
+
     let startButton;
     let number = window.number;
 
     let startGame = function() {
         channel.push("start", {});
     };
+
+    let renderJoining = function() {
+        return <div>
+            <div>Text {name}:&lt;your name&gt; to {number}</div>
+            <button className="btn btn-primary" onClick={startGame}>
+                Start game
+            </button>
+        </div>;
+    }
 
     if (!session) {
         body = <div>Must be logged in to view game</div>;
@@ -27,15 +37,7 @@ function Jeopardy(props) {
     } else {
         switch (gameState.game_state) {
             case "JOINING":
-                body = <div>
-                    <div>Text {name}:&lt;your name&gt; to {number}</div>
-                </div>;
-                players = _.map(gameState.players, function (player, ii) {
-                    return <div key={ii}>{player.name}</div>;
-                });
-                startButton = <button className="btn btn-primary" onClick={startGame}>
-                    Start game
-                </button>;
+                body = renderJoining();
                 break;
             case "SELECTING":
                 body = <Board board={gameState.board}/>;
@@ -57,8 +59,7 @@ function Jeopardy(props) {
     return <div className="game">
         <h3>Jeopardy Game: {name}</h3>
         {body}
-        {players}
-        {startButton}
+        <Players />
     </div>;
 }
 
