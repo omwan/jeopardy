@@ -8,7 +8,7 @@ defmodule Jeopardy.JeopardyAPI do
   def create_board() do 
     resp = HTTPoison.get!("http://jservice.io/api/random?count=10")
     data = Jason.decode!(resp.body)
-    categories = get_categories(@num_categories, data, [])
+    get_categories(@num_categories, data, [])
     |> Enum.map(&(translate_category_by_id(&1)))
     |> Enum.reduce(fn x, acc -> Map.merge(x, acc) end)
   end
@@ -21,7 +21,7 @@ defmodule Jeopardy.JeopardyAPI do
     Map.put(%{}, title, get_random_qset(clues, %{}))
   end
 
-  def get_random_qset(clues, map) when map_size(map) == @num_questions, do: map
+  def get_random_qset(_clues, map) when map_size(map) == @num_questions, do: map
   def get_random_qset(clues, map) do
     random_clue = Enum.random(clues)
     clue_body = %{question: random_clue["question"], answer: random_clue["answer"]}
@@ -33,7 +33,7 @@ defmodule Jeopardy.JeopardyAPI do
   end
 
   def get_clue_value(clue) do
-    {msg, date_aired, _} = DateTime.from_iso8601(clue["airdate"])
+    {_msg, date_aired, _} = DateTime.from_iso8601(clue["airdate"])
     if DateTime.compare(date_aired, @transition) == :lt do
       Integer.to_string(clue["value"] * 2)
     else
@@ -41,7 +41,7 @@ defmodule Jeopardy.JeopardyAPI do
     end
   end
 
-  def get_categories(0, body, acc), do: acc
+  def get_categories(0, _body, acc), do: acc
   def get_categories(number, body, acc) do
     if Enum.member?(acc, hd(body)["category_id"]) do
       get_categories(number, tl(body), acc)
