@@ -165,10 +165,8 @@ defmodule Jeopardy.Game do
     game.question != nil && !Enum.any?(game.players, fn {_name, p} -> Player.answered?(p) end)
   end
 
-  # TODO
-  def game_over?(_game) do
-    false
-    # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
+  def game_over?(game) do
+    Board.all_done?(game.board, game.completed)
   end
 
   def coordinate_to_category(game, coordinate) do
@@ -192,5 +190,4 @@ defmodule Jeopardy.Game do
     ))
     name
   end
-
 end

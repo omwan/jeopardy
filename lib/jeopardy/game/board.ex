@@ -41,4 +41,14 @@ defmodule Jeopardy.Game.Board do
   defp get_category(board, category, value) do
     board[category][to_string(value)]
   end
+
+  def all_done?(board, past_questions) do
+    board
+    |> Enum.all?(fn {category, values} -> 
+        Enum.all?(values, fn {value, _qa} -> 
+          cat = Map.get(past_questions, category)
+          cat && Enum.member?(cat, value)
+        end)
+      end)
+  end
 end
