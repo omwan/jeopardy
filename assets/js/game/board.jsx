@@ -9,6 +9,7 @@ function Board(props) {
     let {gameState, name, session, dispatch} = props;
 
     return <div className="board">
+	<button onClick="">End Game</button>
         {_.map(gameState.board, (c, name) => <Category key={name} category={c} name={name}/>)}
     </div>;
 }

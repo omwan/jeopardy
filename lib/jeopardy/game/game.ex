@@ -13,6 +13,7 @@ defmodule Jeopardy.Game do
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
       active: false
+      host_id: nil
       # map of Player objects, keyed by username
     }
   end
@@ -55,6 +56,11 @@ defmodule Jeopardy.Game do
     else
       game
     end
+  end
+
+  def set_host_id(game, host_id) do
+    game
+    |> Map.put(:host_id, host_id)
   end
 
   # Answering Questions ----------------------------------------------------------------------------
@@ -114,6 +120,20 @@ defmodule Jeopardy.Game do
     correct_answer =~ answer || answer =~ correct_answer
   end
 
+  def end_game(game) do
+    {winner, score} = who_won(game)
+    Jeopardy.Records.create_record(%{player: winner, score: score})
+  end
+
+  def who_won(game) do
+    winner = game.players
+             |> Map.values
+             |> Enum.reduce(%{score: 0}, fn p, acc ->
+                  if (p.score > acc.score) do p else acc end end)
+    IO.inspect(winner)
+    {winner.name, winner.score}
+  end
+
   # Game Status ------------------------------------------------------------------------------------
 
   # game state is one one of:
@@ -142,10 +162,10 @@ defmodule Jeopardy.Game do
     game.question != nil && !Enum.any?(game.players, fn {_name, p} -> Player.answered?(p) end)
   end
 
-  # TODO
-  def game_over?(_game) do
-    false
-    # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
+  def game_over?(game) do
+    game.completed
+    |> Map.values
+    |> Enum.each(&(length(&1) == 5))
   end
 
   # DO THE JEOPARDY API
