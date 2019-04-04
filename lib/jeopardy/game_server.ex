@@ -46,7 +46,24 @@ defmodule Jeopardy.GameServer do
     BackupAgent.get(game_name) || Game.new()
   end
 
+  def put_phone_number(game_name, number) do
+    BackupAgent.put(number, game_name)
+  end
+
+  def get_game_from_phone_number(number) do
+    BackupAgent.get(number)
+  end
+
+  def get_game_state(game_name) do
+    Game.get_game_state(get_game(game_name))
+  end
+
+  def get_category_from_coordinate(game_name, coordinate) do
+    Game.coordinate_to_category(get_game(game_name), coordinate)
+  end
+
   def new_player(game_name, username, number) do
+    put_phone_number(game_name, number)
     GenServer.call(reg(game_name), {:new_player, game_name, username, number})
   end
 

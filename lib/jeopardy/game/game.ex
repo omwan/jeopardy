@@ -60,6 +60,7 @@ defmodule Jeopardy.Game do
   # Answering Questions ----------------------------------------------------------------------------
 
   def new_question(game, category, value) do
+    IO.inspect(Board.get_answer(game.board, category, value))
     game
     |> Map.put(:question, %{category: category, value: value})
   end
@@ -75,7 +76,7 @@ defmodule Jeopardy.Game do
       question = game.question
 
       player = Map.get(game.players, username)
-               |> Player.add_to_score(question.value)
+               |> Player.add_to_score(parse_score(question.value))
 
       game
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
@@ -86,6 +87,15 @@ defmodule Jeopardy.Game do
     else
       # TODO mark that a player has guessed incorrectly and check the next answer??
       game
+    end
+  end
+
+  def parse_score(score) do
+    if is_integer(score) do
+      score
+    else
+      {value, _} = Integer.parse(score)
+      value
     end
   end
 
@@ -148,5 +158,16 @@ defmodule Jeopardy.Game do
     # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
   end
 
-  # DO THE JEOPARDY API
+  def coordinate_to_category(game, coordinate) do
+    letters = ["A", "B", "C", "D", "E", "F"]
+    index = Enum.find_index(
+      letters,
+      fn x ->
+        String.downcase(x) == String.downcase(coordinate)
+      end
+    )
+    Map.keys(game.board)
+    |> Enum.at(index)
+  end
+
 end
