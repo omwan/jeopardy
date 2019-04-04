@@ -9,10 +9,15 @@ defmodule Jeopardy.SmsParser do
     end
   end
 
-  def parse_new_question(game, body) do
+  def parse_new_question(game, _from, body) do
     [coordinate, value] = String.split(body)
     category = GameServer.get_category_from_coordinate(game, coordinate)
     GameServer.new_question(game, category, value)
+  end
+
+  def parse_answer_question(game, from, body) do
+    username = GameServer.get_username_from_phone_number(game, from)
+    GameServer.check_answer(game, username, body)
   end
 
 end

@@ -54,6 +54,10 @@ defmodule Jeopardy.GameServer do
     BackupAgent.get(number)
   end
 
+  def get_username_from_phone_number(game_name, number) do
+    Game.phone_to_username(get_game(game_name), number)
+  end
+
   def get_game_state(game_name) do
     Game.get_game_state(get_game(game_name))
   end

@@ -14,7 +14,9 @@ defmodule JeopardyWeb.TwilioController do
         "JOINING" ->
           SmsParser.parse_join_game(from, body)
         "SELECTING" ->
-          SmsParser.parse_new_question(game, body)
+          SmsParser.parse_new_question(game, from, body)
+        "ANSWERING" ->
+          SmsParser.parse_answer_question(game, from, body)
       end
     else
       SmsParser.parse_join_game(from, body)

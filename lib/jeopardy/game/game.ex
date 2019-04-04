@@ -170,4 +170,14 @@ defmodule Jeopardy.Game do
     |> Enum.at(index)
   end
 
+  def phone_to_username(game, number) do
+    {name, player} = hd(Enum.filter(
+      game.players,
+      fn {name, player} ->
+        number == player.phone_number
+      end
+    ))
+    name
+  end
+
 end
