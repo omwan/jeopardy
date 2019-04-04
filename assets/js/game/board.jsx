@@ -41,7 +41,7 @@ function Card(props) {
         if (status.completed) {
             return;
         } else {
-            api.showQuestion(category, points);
+            api.showQuestion(category, status.value);
         }
     }
 
