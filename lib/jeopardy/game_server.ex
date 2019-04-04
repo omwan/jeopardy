@@ -38,25 +38,60 @@ defmodule Jeopardy.GameServer do
     GenServer.cast(reg(game_name), {:join, game_name, player_name})
   end
 
+  def game_exists?(game_name) do
+    BackupAgent.get(game_name) != nil
+  end
+
   def get_game(game_name) do
     BackupAgent.get(game_name) || Game.new()
+  end
+
+  def new_player(game_name, username, number) do
+    GenServer.call(reg(game_name), {:new_player, game_name, username, number})
+  end
+
+  def start_game(game_name) do
+    GenServer.call(reg(game_name), {:start_game, game_name})
   end
 
   def new_question(game_name, category, value) do
     GenServer.call(reg(game_name), {:question, game_name, category, value})
   end
 
+  def check_answer(game_name, username, answer) do
+    GenServer.call(reg(game_name), {:answer, game_name, username, answer})
+  end
+
   # Server Logic
 
   def handle_cast({:join, game_name, player_name}, _state) do
-    game = Game.add_player(get_game(game_name), player_name)
-    BackupAgent.put(game_name, game)
+#    game = Game.add_player(get_game(game_name), player_name)
+    game = get_game(game_name)
+    BackupAgent.put(game_name, get_game(game_name))
     broadcast(game, game_name)
     {:noreply, game}
   end
 
+  def handle_call({:new_player, game_name, username, number}, _from, _state) do
+    game = Game.add_player(get_game(game_name), username, number)
+    update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:start_game, game_name}, _from, _state) do
+    game = Game.start_game(get_game(game_name))
+    update_and_broadcast(game, game_name)
+  end
+
   def handle_call({:question, game_name, category, value}, _from, _state) do
     game = Game.new_question(get_game(game_name), category, value)
+    update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:answer, game_name, username, answer}, _from, _state) do
+    game = get_game(game_name)
+    # if (game.turn == username) do # TODO
+    |> Game.set_answer(username, answer)
+    |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
 

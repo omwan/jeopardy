@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source .env
 export MIX_ENV=prod
 export PORT=4797
 export NODEBIN=`pwd`/assets/node_modules/.bin
@@ -14,7 +15,6 @@ mix deps.get
 mix compile
 (cd assets && webpack --mode production)
 mix phx.digest
-mix ecto.reset
 
 echo "Generating release..."
 mix release
@@ -23,5 +23,5 @@ mix release
 
 echo "Starting app..."
 
-_build/prod/rel/task_manager_spa/bin/task_manager_spa foreground
+_build/prod/rel/jeopardy/bin/jeopardy foreground
 
