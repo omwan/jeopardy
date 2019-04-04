@@ -1,5 +1,6 @@
 .players {
   display: flex;
+  justify-content: center;
   margin-top: 1rem;
 }
 
@@ -9,7 +10,7 @@
   padding: 1rem;
   margin: .5rem;
   text-align: center;
-  min-width: 18%;
+  min-width: 20%;
 
   p {
     margin-bottom: 0;

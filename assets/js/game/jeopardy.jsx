@@ -5,6 +5,7 @@ import channel from "../channel";
 import Board from './board';
 import AnswerQuestion from './answer-question';
 import Players from './players';
+import GameOver from './game-over';
 
 function Jeopardy(props) {
     const {name, gameName, session, gameState} = props;
@@ -46,9 +47,7 @@ function Jeopardy(props) {
                 body = <AnswerQuestion question={gameState.question}/>;
                 break;
             case "GAMEOVER":
-                body = <div>
-                    <div>GAME OVER</div>
-                </div>;
+                body = <GameOver />;
                 break;
             default:
                 body = <div className="text-danger">Something went wrong</div>;
