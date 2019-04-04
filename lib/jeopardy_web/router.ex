@@ -37,10 +37,4 @@ defmodule JeopardyWeb.Router do
      post "/sms", TwilioController, :receive
    end
 
-  scope "/api/", JeopardyWeb do
-    pipe_through :api
-    
-    post "/sms", SmsController, :index
-  end
-
 end
