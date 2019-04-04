@@ -100,10 +100,11 @@ defmodule Jeopardy.Game do
   end
 
   defp update_completed(nil, question) do
-    %{question.category => [question.value]}
+    %{question.category => [to_string(question.value)]}
   end
   defp update_completed(completed, question) do
-    Map.put(completed, question.category, [question.value | (Map.get(completed, question.category) || [])])
+    Map.put(completed, question.category,
+      [to_string(question.value) | (Map.get(completed, question.category) || [])])
   end
 
   def clear_answers(game) do
