@@ -33,8 +33,17 @@ function Category(props) {
 }
 
 function Card(props) {
-    return <div className="question-card card"
-                onClick={() => api.showQuestion(props.category, props.points)}>{props.points}</div>;
+    let onClick = function() {
+        if (props.points == -1) {
+            return;
+        } else {
+            api.showQuestion(props.category, props.points);
+        }
+    }
+
+    return <div className={"question-card card " + (props.points == -1 ? "disabled" : "")} onClick={onClick}>
+        {props.points == -1 ? "" : props.points}
+    </div>;
 }
 
 Card.propTypes = {

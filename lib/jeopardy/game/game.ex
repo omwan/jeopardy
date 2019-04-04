@@ -77,20 +77,21 @@ defmodule Jeopardy.Game do
 
   def check_answer(game, username, answer) do
     if correct_answer?(game, answer) do
-      question = game.question
-
       player = Map.get(game.players, username)
-               |> Player.add_to_score(parse_score(question.value))
+               |> Player.add_to_score(parse_score(game.question.value))
 
       game
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
       |> Map.put(:players, Map.put(game.players, username, player))
-      |> Map.put(:completed, update_completed(game.completed, question))
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
       |> Map.put(:question, nil)
       |> clear_answers
     else
-      # TODO mark that a player has guessed incorrectly and check the next answer??
       game
+      |> Map.put(:turn, next_username(game, username)) # next player picks next question
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
+      |> Map.put(:question, nil)
+      |> clear_answers
     end
   end
 
@@ -103,11 +104,19 @@ defmodule Jeopardy.Game do
     end
   end
 
-  defp update_completed(nil, question) do
+  # get the username of the next player after the given one
+  defp next_username(game, username) do
+    players = Map.keys(game.players)
+    idx = Enum.find_index(players, fn name -> name == username end)
+    idx = rem(length(players), idx + 1)
+    Enum.at(players, idx)
+  end
+
+  defp mark_question_completed(nil, question) do
     %{question.category => [question.value]}
   end
-  defp update_completed(completed, question) do
-    Map.put(completed, question.category, [question.value | (Map.get(completed, question.category) || [])])
+  defp mark_question_completed(completed, question) do
+    Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
   end
 
   def clear_answers(game) do

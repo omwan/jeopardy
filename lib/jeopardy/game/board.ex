@@ -22,7 +22,7 @@ defmodule Jeopardy.Game.Board do
         vals = Enum.map(values, fn {value, _qa} -> 
           # check if category/value combination appears in past_questions
           cat = Map.get(past_questions, category)
-          if cat && Enum.member?(cat, value), do: "", else: value       
+          if cat && Enum.member?(cat, value), do: -1, else: value       
         end)
         %{category => vals} 
       end)

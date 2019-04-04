@@ -1,6 +1,5 @@
 .game {
   .board {
-
     text-transform: uppercase;
     text-align: center;
     display: flex;
@@ -23,7 +22,11 @@
       color: goldenrod;
       font-size: xx-large;
       font-family: "Swiss 911";
-  }
+    
+      &.disabled {
+        cursor: default;
+      }
+    }
 
     .title-card {
       cursor: default;
@@ -32,7 +35,6 @@
       font-weight: 200;
       min-height: 10rem;
     }
-
   }
 
   .question {
