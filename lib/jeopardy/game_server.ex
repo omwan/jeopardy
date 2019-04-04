@@ -35,7 +35,7 @@ defmodule Jeopardy.GameServer do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end
-    GenServer.cast(reg(game_name), {:join, game_name, player_name})
+    GenServer.cast(reg(game_name), {:join, game_name})
   end
 
   def game_exists?(game_name) do
@@ -46,7 +46,28 @@ defmodule Jeopardy.GameServer do
     BackupAgent.get(game_name) || Game.new()
   end
 
+  def put_phone_number(game_name, number) do
+    BackupAgent.put(number, game_name)
+  end
+
+  def get_game_from_phone_number(number) do
+    BackupAgent.get(number)
+  end
+
+  def get_username_from_phone_number(game_name, number) do
+    Game.phone_to_username(get_game(game_name), number)
+  end
+
+  def get_game_state(game_name) do
+    Game.get_game_state(get_game(game_name))
+  end
+
+  def get_category_from_coordinate(game_name, coordinate) do
+    Game.coordinate_to_category(get_game(game_name), coordinate)
+  end
+
   def new_player(game_name, username, number) do
+    put_phone_number(game_name, number)
     GenServer.call(reg(game_name), {:new_player, game_name, username, number})
   end
 
@@ -64,8 +85,7 @@ defmodule Jeopardy.GameServer do
 
   # Server Logic
 
-  def handle_cast({:join, game_name, player_name}, _state) do
-#    game = Game.add_player(get_game(game_name), player_name)
+  def handle_cast({:join, game_name}, _state) do
     game = get_game(game_name)
     BackupAgent.put(game_name, get_game(game_name))
     broadcast(game, game_name)
