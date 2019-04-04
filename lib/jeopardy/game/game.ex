@@ -33,7 +33,11 @@ defmodule Jeopardy.Game do
 
   defp question_client_view(_game, nil), do: nil
   defp question_client_view(game, question) do
-    Board.get_question(game.board, question.category, question.value)
+    %{
+      category: question.category,
+      value: question.value,
+      question: Board.get_question(game.board, question.category, question.value)
+    }
   end
 
   # Joining ----------------------------------------------------------------------------------------
