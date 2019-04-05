@@ -181,9 +181,10 @@ defmodule Jeopardy.Game do
 
   def game_over?(game) do
     if (game.completed != nil) do
+      IO.inspect(game.completed)
       game.completed
       |> Map.values
-      |> Enum.each(&(length(&1) == 5))
+      |> Enum.all?(&(length(&1) == 5))
     else
       false
     end
