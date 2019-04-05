@@ -5,9 +5,11 @@ defmodule JeopardyWeb.GamesChannel do
 
   def join("games:" <> game, payload, socket) do
     username = Map.get(payload, "username")
+    user_id = Map.get(payload, "user_id")
 
     if authorized?(payload) do
       socket = assign(socket, :game, game)
+      socket = assign(socket, :user_id, user_id)
       GameServer.join(game, username)
       {:ok, socket}
     else
@@ -35,7 +37,8 @@ defmodule JeopardyWeb.GamesChannel do
 
   def handle_in("end_game", _payload, socket) do
     game_name = socket.assigns[:game]
-    GameServer.end_game(game_name)
+    user_id = socket.assigns[:user_id]
+    GameServer.end_game(game_name, user_id)
     {:noreply, socket}
   end
 

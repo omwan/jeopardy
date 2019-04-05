@@ -17,6 +17,12 @@ defmodule Jeopardy.BackupAgent do
     end
   end
 
+  def get_map do
+    Agent.get __MODULE__, fn state ->
+      state
+    end
+  end
+
   def remove(name) do
     Agent.get_and_update(__MODULE__, &(Map.pop(&1, name)))
   end

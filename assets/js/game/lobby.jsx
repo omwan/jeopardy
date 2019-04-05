@@ -2,14 +2,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link, Redirect} from 'react-router-dom';
 
+import Records from './records';
+
 import channel from '../channel';
 
 function Lobby(props) {
     let {session, joinGameInput, gameName, dispatch} = props;
-    let title = "Join Game";
+    let title = "Start A Game";
 
     let joinGame = function () {
-        channel.join(joinGameInput, session.token, session.username);
+        channel.join(joinGameInput, session.token, session.username, session.user_id);
     };
 
     let update = function (event) {
@@ -44,6 +46,9 @@ function Lobby(props) {
                     Join
                 </button>
             </div>
+        </div>
+        <div className="row">
+            <Records />
         </div>
     </div>;
 }

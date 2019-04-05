@@ -12,7 +12,7 @@ defmodule Jeopardy.Game do
       question: nil, # the current question, %{category: "", value: ""}
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
-      active: false
+      active: false,
       # map of Player objects, keyed by username
     }
   end
@@ -21,6 +21,7 @@ defmodule Jeopardy.Game do
     %{
       game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: game.turn,
+      winner: get_winner(game),
       question: question_client_view(game, game.question),
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players)
@@ -137,6 +138,22 @@ defmodule Jeopardy.Game do
     IO.puts correct_answer
     # TODO space-separate both, then check if any words match
     correct_answer =~ answer || answer =~ correct_answer
+  end
+
+  def get_numbers(game) do
+    game.players
+    |> Map.values
+    |> Enum.map(&(&1.phone_number))
+  end
+
+  def get_winner(game) do
+    if game_over?(game) do
+      game.players
+      |> Map.values
+      |> Enum.reduce(%{score: -1}, fn player, acc -> if(player.score > acc.score) do player else acc end end)
+    else
+      nil
+    end
   end
 
   # Game Status ------------------------------------------------------------------------------------
