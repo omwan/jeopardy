@@ -156,7 +156,7 @@ defmodule Jeopardy.GameServer do
            |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
-
+  
   defp update_and_broadcast(game, game_name) do
     Jeopardy.BackupAgent.put(game_name, game)
     broadcast(game, game_name)

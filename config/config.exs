@@ -25,6 +25,8 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+
+# Use ex_twilio for talking to Twilio
 config :ex_twilio,
        account_sid: System.get_env("TWILIO_ACCOUNT_SID"),
        auth_token: System.get_env("TWILIO_AUTH_TOKEN")

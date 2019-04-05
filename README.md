@@ -15,6 +15,10 @@
 * To select a question, text `<category letter>:<value>`, eg: `A:200`
 * To answer a question, text your answer
 
+## Design notes
+
+* Categories will always come back in alphabetical order from left to right, and therefore are assigned letters A-F. To select a question via text, users can text the letter of the category followed by the point vlaue of the question
+
 ## Running the App
 
 To start your Phoenix server:
