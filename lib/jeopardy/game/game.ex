@@ -83,8 +83,9 @@ defmodule Jeopardy.Game do
     correct_user? = username == game.turn
     category_completed = game.completed[category]
     question_already_answered? = category_completed != nil and
-                                 Enum.member?(category_completed, parse_score(value))
+                                 Enum.member?(category_completed, to_string(value))
     valid_value = rem(value, 200) == 0 and value / 200 >= 1 and value / 200 <= 5
+    IO.inspect(question_already_answered?)
     correct_user? and not question_already_answered? and valid_value
   end
 
