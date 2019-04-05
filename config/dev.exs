@@ -83,7 +83,6 @@ end
 config :jeopardy, Jeopardy.Repo,
   username: "jeopardy",
   password: get_secret.("dev-pass"),
-  #password: "jeopardy",
   database: "jeopardy_dev",
   hostname: "localhost",
   pool_size: 10
