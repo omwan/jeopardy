@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 import api from '../api';
 
@@ -9,10 +9,10 @@ function GameOver(props) {
 
     let winner = gameState.winner;
 
-    let endGame = function() {
-      api.endGame();
-      props.history.push('/'); // redirect to Lobby
-    }
+    let endGame = function () {
+        api.endGame();
+        props.history.push('/'); // redirect to Lobby
+    };
 
     return <div className="game-over">
         <h3>GAME OVER</h3>
