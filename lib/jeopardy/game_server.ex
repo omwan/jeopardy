@@ -85,6 +85,8 @@ defmodule Jeopardy.GameServer do
 
   def end_game(game_name) do
     IO.puts("ending " <> game_name)
+    Game.get_numbers(get_game(game_name))
+    |> Enum.each(&(BackupAgent.remove(&1)))
     Registry.unregister(Jeopardy.GameReg, game_name)
     BackupAgent.remove(game_name)
     # TODO remove mapping from phone number to game name
@@ -123,9 +125,9 @@ defmodule Jeopardy.GameServer do
 
   def handle_call({:answer, game_name, username, answer}, _from, _state) do
     game = get_game(game_name)
-    # if (game.turn == username) do # TODO
-    |> Game.set_answer(username, answer)
-    |> Game.check_answer(username, answer)
+           # if (game.turn == username) do # TODO
+           |> Game.set_answer(username, answer)
+           |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
 

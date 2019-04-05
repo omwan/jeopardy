@@ -76,6 +76,7 @@ defmodule Jeopardy.Game do
   end
 
   def check_answer(game, username, answer) do
+    IO.inspect(game.completed)
     if correct_answer?(game, answer) do
       player = Map.get(game.players, username)
                |> Player.add_to_score(parse_score(game.question.value))
@@ -113,7 +114,7 @@ defmodule Jeopardy.Game do
   end
 
   defp mark_question_completed(nil, question) do
-    %{question.category => [question.value]}
+    %{question.category => [Integer.to_string(question.value)]}
   end
   defp mark_question_completed(completed, question) do
     Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
@@ -135,6 +136,12 @@ defmodule Jeopardy.Game do
     IO.puts correct_answer
     # TODO space-separate both, then check if any words match
     correct_answer =~ answer || answer =~ correct_answer
+  end
+
+  def get_numbers(game) do
+    game.players
+    |> Map.values
+    |> Enum.map(&(&1.phone_number))
   end
 
   # Game Status ------------------------------------------------------------------------------------
@@ -166,7 +173,8 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
-    Board.all_done?(game.board, game.completed)
+    map_size(game.players) == @num_players
+#    Board.all_done?(game.board, game.completed)
   end
 
   def coordinate_to_category(game, coordinate) do
