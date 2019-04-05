@@ -6,7 +6,7 @@ import Board from './board';
 import AnswerQuestion from './answer-question';
 
 function Jeopardy(props) {
-    const {name, session, gameState} = props;
+    const {name, gameName, session, gameState} = props;
 
     let body;
     let players;
@@ -20,8 +20,10 @@ function Jeopardy(props) {
     if (!session) {
         body = <div>Must be logged in to view game</div>;
     } else if (!gameState) {
-        channel.join(name, session.token, session.username, session.user_id);
-        body = <div>Please refresh the page</div>;
+        if (!gameName) {
+            channel.join(name, session.token, session.username, session.user_id);
+        }
+        body = <div>Loading your game</div>;
     } else {
         switch (gameState.game_state) {
             case "JOINING":
@@ -64,6 +66,7 @@ function Jeopardy(props) {
 function stateToProps(state) {
     return {
         gameState: state.gameState,
+        gameName: state.gameName,
         session: state.session
     };
 }

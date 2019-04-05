@@ -1,6 +1,22 @@
 # Jeopardy
 
+## Gameplay
+
+* Post mocked texts to `localhost:4000/api/v1/sms` with the following format:
+
+```
+{
+  "From": <phone number sending text>,
+  "Body": <body of text>
+}
+```
+
+* To join a game, text `<game name>:<username>`, eg: `demo:olivia`
+* To select a question, text `<category letter>:<value>`, eg: `A:200`
+* To answer a question, text your answer
+
 ## Running the App
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

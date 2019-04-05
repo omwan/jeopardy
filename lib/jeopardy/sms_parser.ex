@@ -2,7 +2,7 @@ defmodule Jeopardy.SmsParser do
 
   alias Jeopardy.GameServer
 
-  def parse(from, body) do
+  def parse_join_game(from, body) do
     [game, name] = String.split(body, ":")
     route(from, body, game)
     if GameServer.game_exists?(game) do
@@ -10,11 +10,15 @@ defmodule Jeopardy.SmsParser do
     end
   end
 
-  def route(from, body, game) do
-    game_state = GameServer.check_state(game)
-    case game_state do
-      _ -> IO.inspect(game_state)
-    end
+  def parse_new_question(game, _from, body) do
+    [coordinate, value] = String.split(body, ":")
+    category = GameServer.get_category_from_coordinate(game, coordinate)
+    GameServer.new_question(game, category, value)
+  end
+
+  def parse_answer_question(game, from, body) do
+    username = GameServer.get_username_from_phone_number(game, from)
+    GameServer.check_answer(game, username, body)
   end
 
 end

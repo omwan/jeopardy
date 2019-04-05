@@ -8,18 +8,26 @@ import api from '../api';
 function Board(props) {
     let {gameState, name, session, dispatch} = props;
 
+    let letters = ["A", "B", "C", "D", "E", "F"];
+    let i = 0;
+
+    let board = _.map(gameState.board, function(c, name) {
+        let letter = letters[i];
+        i++;
+        return <Category key={name} category={c} name={name} letter={letter}/>;
+    });
+
     return <div className="board">
-	<button onClick="">End Game</button>
-        {_.map(gameState.board, (c, name) => <Category key={name} category={c} name={name}/>)}
+        {board}
     </div>;
 }
 
 function Category(props) {
-    let {name, category} = props;
+    let {name, category, letter} = props;
     let values = _.sortBy(_.map(category, (value) => parseInt(value)));
 
     return <div className="category">
-        <div className="title-card card">{name}</div>
+        <div className="title-card card">{letter}: {name}</div>
         {_.map(values, (points, idx) => <Card key={idx} category={name} points={points} />)}
     </div>
 }
