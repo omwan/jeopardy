@@ -113,7 +113,7 @@ defmodule Jeopardy.Game do
   end
 
   defp mark_question_completed(nil, question) do
-    %{question.category => [question.value]}
+    %{question.category => [Integer.to_string(question.value)]}
   end
   defp mark_question_completed(completed, question) do
     Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
@@ -127,6 +127,8 @@ defmodule Jeopardy.Game do
     Map.put(game, :players, players)
   end
 
+  def correct_answer?(game, nil), do: false
+  def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
