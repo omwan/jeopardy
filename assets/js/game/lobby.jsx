@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link, Redirect} from 'react-router-dom';
 
+import Records from './records';
+
 import channel from '../channel';
 
 function Lobby(props) {
@@ -44,6 +46,9 @@ function Lobby(props) {
                     Join
                 </button>
             </div>
+        </div>
+        <div className="row">
+            <Records />
         </div>
     </div>;
 }

@@ -190,8 +190,7 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
-    map_size(game.players) == @num_players
-#    Board.all_done?(game.board, game.completed)
+    Board.all_done?(game.board, game.completed)
   end
 
   def coordinate_to_category(game, coordinate) do
