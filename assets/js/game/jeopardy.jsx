@@ -38,7 +38,10 @@ function Jeopardy(props) {
                 </button>;
                 break;
             case "SELECTING":
-                body = <Board board={gameState.board}/>;
+                body = <div>
+			<button>End Game</button>
+			<Board board={gameState.board}/>
+			</div>;
                 break;
             case "ANSWERING":
                 body = <AnswerQuestion question={gameState.question}/>;
