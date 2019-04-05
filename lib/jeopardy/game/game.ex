@@ -112,14 +112,6 @@ defmodule Jeopardy.Game do
     end
   end
 
-<<<<<<< HEAD
-  defp update_completed(nil, question) do
-    %{question.category => [to_string(question.value)]}
-  end
-  defp update_completed(completed, question) do
-    Map.put(completed, question.category,
-      [to_string(question.value) | (Map.get(completed, question.category) || [])])
-=======
   # get the username of the next player after the given one
   defp next_username(game, username) do
     players = Map.keys(game.players)
@@ -133,7 +125,6 @@ defmodule Jeopardy.Game do
   end
   defp mark_question_completed(completed, question) do
     Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
->>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def clear_answers(game) do
@@ -156,29 +147,12 @@ defmodule Jeopardy.Game do
     correct_answer =~ answer || answer =~ correct_answer
   end
 
-<<<<<<< HEAD
-  def end_game(game) do
-    {winner, score} = who_won(game)
-    Jeopardy.Records.create_record(%{player: winner, score: score})
-  end
-
-=======
->>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   def get_numbers(game) do
     game.players
     |> Map.values
     |> Enum.map(&(&1.phone_number))
   end
 
-<<<<<<< HEAD
-  def who_won(game) do
-    winner = game.players
-             |> Map.values
-             |> Enum.reduce(%{score: 0}, fn p, acc ->
-                  if (p.score > acc.score) do p else acc end end)
-    IO.inspect(winner)
-    {winner.name, winner.score}
-=======
   def get_winner(game) do
     if game_over?(game) do
       game.players
@@ -187,7 +161,6 @@ defmodule Jeopardy.Game do
     else
       nil
     end
->>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   # Game Status ------------------------------------------------------------------------------------
@@ -219,18 +192,7 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
-<<<<<<< HEAD
-    if (game.completed != nil) do
-      game.completed
-      |> (fn c -> if (Map.size(c) == 6) do c else %{error: %{}} end end).()
-      |> Map.values
-      |> Enum.all?(&(length(&1) == 5))
-    else
-      false
-    end
-=======
     Board.all_done?(game.board, game.completed)
->>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def coordinate_to_category(game, coordinate) do

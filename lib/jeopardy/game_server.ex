@@ -35,11 +35,7 @@ defmodule Jeopardy.GameServer do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end
-<<<<<<< HEAD
-    GenServer.cast(reg(game_name), {:join, game_name, player_name, user_id})
-=======
     GenServer.cast(reg(game_name), {:join, game_name, user_id})
->>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def game_exists?(game_name) do
