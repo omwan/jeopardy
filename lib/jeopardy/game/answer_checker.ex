@@ -15,6 +15,7 @@ defmodule Jeopardy.AnswerChecker do
 
   def split_answer(answer) do
     answer
+    |> String.replace(", ", " ")
     |> String.replace(",", " ")
     |> String.replace("\"", "")
     |> String.replace("(", "")

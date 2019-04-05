@@ -136,8 +136,7 @@ defmodule Jeopardy.Game do
                      |> String.downcase
 
     IO.puts correct_answer
-    # TODO space-separate both, then check if any words match
-    correct_answer =~ answer || answer =~ correct_answer
+    Jeopardy.AnswerChecker.is_correct?(answer, correct_answer)
   end
 
   def get_numbers(game) do
