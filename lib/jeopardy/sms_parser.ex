@@ -10,10 +10,12 @@ defmodule Jeopardy.SmsParser do
   end
 
   def parse_new_question(game, _from, body) do
-    [coordinate, value_string] = String.split(body, ":")
-    {value, _} = Integer.parse(value_string)
-    category = GameServer.get_category_from_coordinate(game, coordinate)
-    GameServer.new_question(game, category, String.to_integer(value))
+    if String.contains?(body, ":") do
+      [coordinate, value_string] = String.split(body, ":")
+      {value, _} = Integer.parse(value_string)
+      category = GameServer.get_category_from_coordinate(game, coordinate)
+      GameServer.new_question(game, category, String.to_integer(value))
+    end
   end
 
   def parse_answer_question(game, from, body) do

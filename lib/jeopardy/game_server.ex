@@ -24,6 +24,7 @@ defmodule Jeopardy.GameServer do
   def start_link(game_name) do
     game = BackupAgent.get(game_name) || Game.new()
     GenServer.start_link(__MODULE__, game, name: reg(game_name))
+    GenServer.cast(reg(game_name), {:join, game_name})
   end
 
   # runs after server is started with start_link
@@ -34,8 +35,9 @@ defmodule Jeopardy.GameServer do
   def join(game_name) do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
+    else
+      GenServer.cast(reg(game_name), {:join, game_name})
     end
-    GenServer.cast(reg(game_name), {:join, game_name})
   end
 
   def game_exists?(game_name) do

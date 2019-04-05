@@ -13,6 +13,10 @@ defmodule Jeopardy.Game do
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
       active: false,
+      last_answer: %{
+        correct: false,
+        value: ""
+      }
       # map of Player objects, keyed by username
     }
   end
@@ -23,6 +27,7 @@ defmodule Jeopardy.Game do
       turn: game.turn,
       winner: get_winner(game),
       question: question_client_view(game, game.question),
+      last_answer: game.last_answer,
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players)
     }
@@ -86,11 +91,19 @@ defmodule Jeopardy.Game do
       |> Map.put(:players, Map.put(game.players, username, player))
       |> Map.put(:completed, mark_question_completed(game.completed, game.question))
       |> Map.put(:question, nil)
+      |> Map.put(:last_answer, %{
+        value: Board.get_answer(game.board, game.question.category, game.question.value),
+        correct: true
+      })
       |> clear_answers
     else
       game
       |> Map.put(:turn, next_username(game, username)) # next player picks next question
       |> Map.put(:completed, mark_question_completed(game.completed, game.question))
+      |> Map.put(:last_answer, %{
+        value: Board.get_answer(game.board, game.question.category, game.question.value),
+        correct: false
+      })
       |> Map.put(:question, nil)
       |> clear_answers
     end
@@ -185,6 +198,7 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
+#    map_size(game.players) == @num_players
     Board.all_done?(game.board, game.completed)
   end
 

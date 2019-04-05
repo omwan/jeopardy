@@ -11,39 +11,51 @@ function Board(props) {
     let letters = ["A", "B", "C", "D", "E", "F"];
     let i = 0;
 
-    let board = _.map(gameState.board, function(c, name) {
+    let board = _.map(gameState.board, function (c, name) {
         let letter = letters[i];
         i++;
         return <Category key={name} category={c} name={name} letter={letter}/>;
     });
 
-    return <div className="board">
-        {board}
+    let turn = gameState.turn;
+    let answer = function() {
+        if (gameState.last_answer.correct) {
+            return `${gameState.turn} correctly answered \"${gameState.last_answer.value}\"`;
+        } else {
+            return `The correct answer is \"${gameState.last_answer.value}\"`;
+        }
+    };
+
+    return <div>
+        {answer()}, it's now {turn}'s turn.
+        <div className="board">
+            {board}
+        </div>
     </div>;
 }
 
 function Category(props) {
     let {name, category, letter} = props;
     let values = _.sortBy(_.map(category, (status) => {
-        return {"completed": status.completed, "value": parseInt(status.value)}; 
+        return {"completed": status.completed, "value": parseInt(status.value)};
     }), ['value']);
 
     return <div className="category">
         <div className="title-card card">{letter}: {name}</div>
-        {_.map(values, (status, idx) => <Card key={idx} category={name} status={status} />)}
+        {_.map(values, (status, idx) => <Card key={idx} category={name} status={status}/>)}
     </div>
 }
 
 function Card(props) {
     let {category, status} = props;
 
-    let onClick = function() {
+    let onClick = function () {
         if (status.completed) {
             return;
         } else {
             api.showQuestion(category, status.value);
         }
-    }
+    };
 
     return <div className={"question-card card " + (status.completed ? "disabled" : "")} onClick={onClick}>
         {status.completed ? "" : status.value}
@@ -55,7 +67,7 @@ Card.propTypes = {
     status: PropTypes.shape({
         value: PropTypes.number,
         completed: PropTypes.bool
-  }),
+    }),
 };
 
 function stateToProps(state) {
