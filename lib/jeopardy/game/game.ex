@@ -22,6 +22,7 @@ defmodule Jeopardy.Game do
     %{
       game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: game.turn,
+      winner: get_winner(game),
       question: question_client_view(game, game.question),
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players)
@@ -148,6 +149,16 @@ defmodule Jeopardy.Game do
     game.players
     |> Map.values
     |> Enum.map(&(&1.phone_number))
+  end
+
+  def get_winner(game) do
+    if game_over?(game) do
+      game.players
+      |> Map.values
+      |> Enum.reduce(%{score: -1}, fn player, acc -> if(player.score > acc.score) do player else acc end end)
+    else
+      nil
+    end
   end
 
   # Game Status ------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ import api from '../api';
 function GameOver(props) {
     let {gameState} = props;
 
-    let winner = _.maxBy(_.values(gameState.players), 'score');
+    let winner = gameState.winner;
 
     let endGame = function() {
       api.endGame();
