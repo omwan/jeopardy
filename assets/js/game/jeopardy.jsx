@@ -21,7 +21,7 @@ function Jeopardy(props) {
 
     let renderJoining = function() {
         return <div>
-            <div>Text {name}:&lt;your name&gt; to {number}</div>
+            <div>Text "{name}:&lt;your name&gt;" to {number}</div>
             <button className="btn btn-primary" onClick={startGame}>
                 Start game
             </button>

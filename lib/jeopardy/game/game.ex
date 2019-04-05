@@ -133,7 +133,7 @@ defmodule Jeopardy.Game do
                      |> String.downcase
 
     IO.puts correct_answer
-    # check if one is a substring of the other ¯\_(ツ)_/¯
+    # TODO space-separate both, then check if any words match
     correct_answer =~ answer || answer =~ correct_answer
   end
 

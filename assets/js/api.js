@@ -129,6 +129,14 @@ class Server {
     answerQuestion(username, answer) {
         channel.push("answer", {username: username, answer: answer});
     }
+
+    endGame() {
+        store.dispatch({
+            type: "CLEAR_GAME_NAME"
+        });
+
+        channel.push("end_game");
+    }
 }
 
 export default new Server();

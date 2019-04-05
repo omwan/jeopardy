@@ -42,6 +42,7 @@ defmodule Jeopardy.Game.Board do
     board[category][to_string(value)]
   end
 
+  def all_done?(_board, nil), do: false
   def all_done?(board, past_questions) do
     board
     |> Enum.all?(fn {category, values} -> 
