@@ -31,7 +31,7 @@ defmodule Jeopardy.GameServer do
     {:ok, state}
   end
 
-  def join(game_name, player_name) do
+  def join(game_name) do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end

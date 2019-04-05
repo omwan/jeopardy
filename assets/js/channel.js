@@ -17,12 +17,11 @@ class Channel {
         console.log("Connected to socket");
     }
 
-    join(game, token, username, user_id) {
+    join(game, token, username) {
         if (this.socket !== null) {
             let payload = {
                 token: token,
-                username: username,
-                user_id: user_id
+                username: username
             };
             this.channel = this.socket.channel(`games:${game}`, payload);
             this.channel.join()

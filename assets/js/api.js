@@ -135,7 +135,7 @@ class Server {
             type: "CLEAR_GAME_NAME"
         });
 
-        channel.push("end_game");
+        channel.push("end_game", {});
     }
 
     fetchAllRecords() {

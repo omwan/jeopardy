@@ -1,17 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Link, Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 import Records from './records';
 
 import channel from '../channel';
 
 function Lobby(props) {
-    let {session, joinGameInput, gameName, dispatch} = props;
+    let {session, joinGameInput, dispatch} = props;
     let title = "Start A Game";
 
     let joinGame = function () {
-        channel.join(joinGameInput, session.token, session.username, session.user_id);
+        channel.join(joinGameInput, session.token, session.username);
+        props.history.push(`/game/${joinGameInput}`)
     };
 
     let update = function (event) {
@@ -26,10 +27,6 @@ function Lobby(props) {
             <h2>{title}</h2>
             <p>You must log in to join a game.</p>
         </div>
-    }
-
-    if (gameName) {
-        return <Redirect to={`/game/${gameName}`}/>;
     }
 
     return <div>
@@ -57,8 +54,9 @@ function stateToProps(state) {
     return {
         session: state.session,
         joinGameInput: state.joinGameInput,
-        gameName: state.gameName
+        gameName: state.gameName,
+        gameState: state.gameState
     }
 }
 
-export default connect(stateToProps)(Lobby);
+export default connect(stateToProps)(withRouter(Lobby));

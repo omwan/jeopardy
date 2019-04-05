@@ -22,7 +22,7 @@ defmodule JeopardyWeb.UserSocket do
       {:ok, user_id} ->
         {:ok, assign(socket, :user_id, user_id)}
       {:error, error} ->
-        {:error, error}
+        :error
     end
   end
 

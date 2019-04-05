@@ -41,6 +41,7 @@ class Root extends React.Component {
                         type: "GAME_NAME_SUBMITTED",
                         data: false
                     });
+                    api.fetchAllRecords();
                     return <Lobby/>;
                 }} />
                 <Route path={"/game/:name"} exact={true}
