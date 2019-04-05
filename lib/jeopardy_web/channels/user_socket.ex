@@ -21,7 +21,7 @@ defmodule JeopardyWeb.UserSocket do
     case Phoenix.Token.verify(JeopardyWeb.Endpoint, "user_id", token, [max_age: 86400]) do
       {:ok, user_id} ->
         {:ok, assign(socket, :user_id, user_id)}
-      {:error, error} ->
+      {:error, _error} ->
         :error
     end
   end
