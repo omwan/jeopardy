@@ -9,7 +9,8 @@ defmodule JeopardyWeb.GamesChannel do
 
     if authorized?(payload) do
       socket = assign(socket, :game, game)
-      GameServer.join(game, username, user_id)
+      socket = assign(socket, :user_id, user_id)
+      GameServer.join(game, username)
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -36,7 +37,8 @@ defmodule JeopardyWeb.GamesChannel do
 
   def handle_in("end_game", _payload, socket) do
     game_name = socket.assigns[:game]
-    GameServer.end_game(game_name)
+    user_id = socket.assigns[:user_id]
+    GameServer.end_game(game_name, user_id)
     {:noreply, socket}
   end
 

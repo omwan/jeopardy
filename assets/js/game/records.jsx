@@ -4,8 +4,6 @@ import {connect} from 'react-redux';
 function Records(props) {
     let {records} = props;
 
-    console.log("hey", records);
-
     let recordList = _.map(records, function (record, ii) {
         return <Record key={ii} record={record}/>;
     });

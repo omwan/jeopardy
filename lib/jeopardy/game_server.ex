@@ -31,11 +31,11 @@ defmodule Jeopardy.GameServer do
     {:ok, state}
   end
 
-  def join(game_name, player_name, user_id) do
+  def join(game_name, player_name) do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end
-    GenServer.cast(reg(game_name), {:join, game_name, user_id})
+    GenServer.cast(reg(game_name), {:join, game_name})
   end
 
   def game_exists?(game_name) do
@@ -83,24 +83,39 @@ defmodule Jeopardy.GameServer do
     GenServer.call(reg(game_name), {:answer, game_name, username, answer})
   end
 
-  def end_game(game_name) do
+  def end_game(game_name, user_id) do
     IO.puts("ending " <> game_name)
     game = get_game(game_name)
+    remove_phone_numbers(game)
+    winner = Game.get_winner(game)
+    create_winner_record(winner, user_id)
+    unregister_game(game_name)
+    GenServer.cast(reg(game_name), {:end, game_name})
+  end
+
+  defp remove_phone_numbers(game) do
     Game.get_numbers(game)
     |> Enum.each(&(BackupAgent.remove(&1)))
-    winner = Game.get_winner(game)
-    IO.inspect(winner)
-    Jeopardy.Records.create_record(%{player: winner.name, score: winner.score, user_id: game.host_id})
+  end
+
+  defp create_winner_record(winner, user_id) do
+    record = %{
+      player: winner.name,
+      score: winner.score,
+      user_id: user_id
+    }
+    Jeopardy.Records.create_record(record)
+  end
+
+  defp unregister_game(game_name) do
     Registry.unregister(Jeopardy.GameReg, game_name)
     BackupAgent.remove(game_name)
-    # TODO remove mapping from phone number to game name
-    GenServer.cast(reg(game_name), {:end, game_name})
   end
 
   # Server Logic
 
-  def handle_cast({:join, game_name, user_id}, _state) do
-    game = Game.set_host_id(get_game(game_name), user_id)
+  def handle_cast({:join, game_name}, _state) do
+    game = get_game(game_name)
     BackupAgent.put(game_name, game)
     broadcast(game, game_name)
     {:noreply, game}

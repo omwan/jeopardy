@@ -13,7 +13,6 @@ defmodule Jeopardy.Game do
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
       active: false,
-      host_id: nil,
       # map of Player objects, keyed by username
     }
   end
@@ -63,11 +62,6 @@ defmodule Jeopardy.Game do
     end
   end
 
-  def set_host_id(game, host_id) do
-    game
-    |> Map.put(:host_id, host_id)
-  end
-
   # Answering Questions ----------------------------------------------------------------------------
 
   def new_question(game, category, value) do
@@ -83,7 +77,6 @@ defmodule Jeopardy.Game do
   end
 
   def check_answer(game, username, answer) do
-    IO.inspect(game.completed)
     if correct_answer?(game, answer) do
       player = Map.get(game.players, username)
                |> Player.add_to_score(parse_score(game.question.value))

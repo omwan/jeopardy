@@ -8,7 +8,7 @@ import channel from '../channel';
 
 function Lobby(props) {
     let {session, joinGameInput, gameName, dispatch} = props;
-    let title = "Join Game";
+    let title = "Start A Game";
 
     let joinGame = function () {
         channel.join(joinGameInput, session.token, session.username, session.user_id);
