@@ -17,7 +17,6 @@ defmodule Jeopardy.Game.Board do
   # Produces object of this shape, with past_questions marked completed:
   # { "category1" => [{value: "200", completed: #t}, {value: "400", completed: #f}, {value: "600", completed: #f}], {value: "800", completed: #f}, {value: "1000", completed: #f}], ...}
   def client_view(board, past_questions) do
-    IO.inspect(past_questions)
     board
     |> Enum.map(fn {category, values} -> 
         vals = Enum.map(values, fn {value, _qa} -> 
