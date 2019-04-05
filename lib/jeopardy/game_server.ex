@@ -134,15 +134,7 @@ defmodule Jeopardy.GameServer do
            |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
-
-  def handle_call({:end_game, game_name}, _from, _state) do
-    game = get_game(game_name)
-    numbers = Game.get_numbers(game)
-    |> Enum.each(&(BackupAgent.remove(&1)))
-    
-    Game.end_game(game)
-  end
-
+  
   defp update_and_broadcast(game, game_name) do
     Jeopardy.BackupAgent.put(game_name, game)
     broadcast(game, game_name)
