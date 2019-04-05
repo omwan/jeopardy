@@ -24,7 +24,13 @@ function Board(props) {
 
 function Category(props) {
     let {name, category, letter} = props;
-    let values = _.sortBy(_.map(category, (value) => parseInt(value)));
+    let values = _.sortBy(_.map(category, function(value) {
+        if (value === "") {
+            return "";
+        } else {
+            return parseInt(value);
+        }
+    }));
 
     return <div className="category">
         <div className="title-card card">{letter}: {name}</div>

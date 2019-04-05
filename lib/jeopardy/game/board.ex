@@ -17,12 +17,13 @@ defmodule Jeopardy.Game.Board do
   # Produces object of this shape, with past_questions hidden:
   # { "category1" => ["200", "", "600", "", "1000"], "category2" => ["200", "", "600", "800", "1000"]}
   def client_view(board, past_questions) do
+    IO.inspect(past_questions)
     board
     |> Enum.map(fn {category, values} -> 
         vals = Enum.map(values, fn {value, _qa} -> 
           # check if category/value combination appears in past_questions
           cat = Map.get(past_questions, category)
-          if cat && Enum.member?(cat, value), do: "", else: value       
+          if cat && Enum.member?(cat, value), do: "", else: value
         end)
         %{category => vals} 
       end)

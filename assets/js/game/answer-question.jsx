@@ -8,7 +8,7 @@ function AnswerQuestion(props) {
 
     let handleSubmit = function(ev) {
         ev.preventDefault();
-        api.answerQuestion(session.username, input.answer);
+        api.answerQuestion("olivia", input.answer);
         update({answer: ""});
     }
 
