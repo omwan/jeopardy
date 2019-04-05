@@ -41,10 +41,7 @@ function Jeopardy(props) {
                 body = renderJoining();
                 break;
             case "SELECTING":
-                body = <div>
-			<button>End Game</button>
-			<Board board={gameState.board}/>
-			</div>;
+                body = <Board board={gameState.board}/>;
                 break;
             case "ANSWERING":
                 body = <AnswerQuestion question={gameState.question}/>;
