@@ -75,6 +75,8 @@ function joinGameInput(state = "", action) {
     switch (action.type) {
         case 'UPDATE_GAME_NAME':
             return action.data;
+        case 'CLEAR_GAME_NAME':
+            return "";
         default:
             return state;
     }

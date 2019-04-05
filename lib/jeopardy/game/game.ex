@@ -33,7 +33,11 @@ defmodule Jeopardy.Game do
 
   defp question_client_view(_game, nil), do: nil
   defp question_client_view(game, question) do
-    Board.get_question(game.board, question.category, question.value)
+    %{
+      category: question.category,
+      value: question.value,
+      question: Board.get_question(game.board, question.category, question.value)
+    }
   end
 
   # Joining ----------------------------------------------------------------------------------------
@@ -73,20 +77,21 @@ defmodule Jeopardy.Game do
 
   def check_answer(game, username, answer) do
     if correct_answer?(game, answer) do
-      question = game.question
-
       player = Map.get(game.players, username)
-               |> Player.add_to_score(parse_score(question.value))
+               |> Player.add_to_score(parse_score(game.question.value))
 
       game
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
       |> Map.put(:players, Map.put(game.players, username, player))
-      |> Map.put(:completed, update_completed(game.completed, question))
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
       |> Map.put(:question, nil)
       |> clear_answers
     else
-      # TODO mark that a player has guessed incorrectly and check the next answer??
       game
+      |> Map.put(:turn, next_username(game, username)) # next player picks next question
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
+      |> Map.put(:question, nil)
+      |> clear_answers
     end
   end
 
@@ -99,11 +104,19 @@ defmodule Jeopardy.Game do
     end
   end
 
-  defp update_completed(nil, question) do
-    %{question.category => [question.value]}
+  # get the username of the next player after the given one
+  defp next_username(game, username) do
+    players = Map.keys(game.players)
+    idx = Enum.find_index(players, fn name -> name == username end)
+    idx = rem(length(players), idx + 1)
+    Enum.at(players, idx)
   end
-  defp update_completed(completed, question) do
-    Map.put(completed, question.category, [question.value | (Map.get(completed, question.category) || [])])
+
+  defp mark_question_completed(nil, question) do
+    %{question.category => [Integer.to_string(question.value)]}
+  end
+  defp mark_question_completed(completed, question) do
+    Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
   end
 
   def clear_answers(game) do
@@ -114,13 +127,15 @@ defmodule Jeopardy.Game do
     Map.put(game, :players, players)
   end
 
+  def correct_answer?(game, nil), do: false
+  def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
                      |> String.downcase
 
     IO.puts correct_answer
-    # check if one is a substring of the other ¯\_(ツ)_/¯
+    # TODO space-separate both, then check if any words match
     correct_answer =~ answer || answer =~ correct_answer
   end
 
@@ -152,10 +167,8 @@ defmodule Jeopardy.Game do
     game.question != nil && !Enum.any?(game.players, fn {_name, p} -> Player.answered?(p) end)
   end
 
-  # TODO
-  def game_over?(_game) do
-    false
-    # Board.all_done?(game.board) # Enum.all?(board, &(Category.all_done?(&1))) -> Enum.all?(category, &(&1.answered))
+  def game_over?(game) do
+    Board.all_done?(game.board, game.completed)
   end
 
   def coordinate_to_category(game, coordinate) do
@@ -179,5 +192,4 @@ defmodule Jeopardy.Game do
     ))
     name
   end
-
 end

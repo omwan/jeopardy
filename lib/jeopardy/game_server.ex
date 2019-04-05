@@ -83,11 +83,25 @@ defmodule Jeopardy.GameServer do
     GenServer.call(reg(game_name), {:answer, game_name, username, answer})
   end
 
+  def end_game(game_name) do
+    IO.puts("ending " <> game_name)
+    Registry.unregister(Jeopardy.GameReg, game_name)
+    BackupAgent.remove(game_name)
+    # TODO remove mapping from phone number to game name
+    GenServer.cast(reg(game_name), {:end, game_name})
+  end
+
   # Server Logic
 
   def handle_cast({:join, game_name}, _state) do
     game = get_game(game_name)
-    BackupAgent.put(game_name, get_game(game_name))
+    BackupAgent.put(game_name, game)
+    broadcast(game, game_name)
+    {:noreply, game}
+  end
+
+  def handle_cast({:end, game_name}, _state) do
+    game = Game.new()
     broadcast(game, game_name)
     {:noreply, game}
   end
