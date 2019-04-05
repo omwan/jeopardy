@@ -53,9 +53,7 @@ function Lobby(props) {
 function stateToProps(state) {
     return {
         session: state.session,
-        joinGameInput: state.joinGameInput,
-        gameName: state.gameName,
-        gameState: state.gameState
+        joinGameInput: state.joinGameInput
     }
 }
 

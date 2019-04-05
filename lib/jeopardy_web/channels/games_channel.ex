@@ -13,9 +13,9 @@ defmodule JeopardyWeb.GamesChannel do
     end
   end
 
-  def handle_in("new_question", %{ "category" => category, "value" => value }, socket) do
+  def handle_in("new_question", %{"username" => username, "category" => category, "value" => value}, socket) do
     game_name = socket.assigns[:game]
-    GameServer.new_question(game_name, category, value)
+    GameServer.new_question(game_name, username, category, value)
     {:noreply, socket}
   end
 
@@ -25,7 +25,7 @@ defmodule JeopardyWeb.GamesChannel do
     {:noreply, socket}
   end
 
-  def handle_in("answer", %{ "username" => username, "answer" => answer }, socket) do
+  def handle_in("answer", %{"username" => username, "answer" => answer}, socket) do
     game_name = socket.assigns[:game]
     GameServer.check_answer(game_name, username, answer)
     {:noreply, socket}

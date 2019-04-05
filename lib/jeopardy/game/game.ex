@@ -2,6 +2,7 @@ defmodule Jeopardy.Game do
 
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
+  alias Jeopardy.AnswerChecker
 
   @num_players 2 # TODO increase this
 
@@ -13,6 +14,10 @@ defmodule Jeopardy.Game do
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
       active: false,
+      last_answer: %{
+        correct: false,
+        value: ""
+      }
       # map of Player objects, keyed by username
     }
   end
@@ -23,6 +28,7 @@ defmodule Jeopardy.Game do
       turn: game.turn,
       winner: get_winner(game),
       question: question_client_view(game, game.question),
+      last_answer: game.last_answer,
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players)
     }
@@ -48,6 +54,15 @@ defmodule Jeopardy.Game do
       player = Player.new(player_name, number)
       game
       |> Map.put(:players, Map.put(game.players, player_name, player))
+      |> set_turn(player_name)
+    else
+      game
+    end
+  end
+
+  def set_turn(game, player_name) do
+    if game.turn == "" do
+      Map.put(game, :turn, player_name)
     else
       game
     end
@@ -64,6 +79,15 @@ defmodule Jeopardy.Game do
 
   # Answering Questions ----------------------------------------------------------------------------
 
+  def valid_question_selection(game, username, category, value) do
+    correct_user? = username == game.turn
+    category_completed = game.completed[category]
+    question_already_answered? = category_completed != nil and
+                                 Enum.member?(category_completed, to_string(value))
+    valid_value = rem(value, 200) == 0 and value / 200 >= 1 and value / 200 <= 5
+    correct_user? and not question_already_answered? and valid_value
+  end
+
   def new_question(game, category, value) do
     IO.inspect(Board.get_answer(game.board, category, value))
     game
@@ -77,6 +101,9 @@ defmodule Jeopardy.Game do
   end
 
   def check_answer(game, username, answer) do
+    formatted_answer = Board.get_answer(game.board, game.question.category, game.question.value)
+                       |> AnswerChecker.remove_tags
+                       |> String.replace("\\'", "\'")
     if correct_answer?(game, answer) do
       player = Map.get(game.players, username)
                |> Player.add_to_score(parse_score(game.question.value))
@@ -86,11 +113,25 @@ defmodule Jeopardy.Game do
       |> Map.put(:players, Map.put(game.players, username, player))
       |> Map.put(:completed, mark_question_completed(game.completed, game.question))
       |> Map.put(:question, nil)
+      |> Map.put(
+           :last_answer,
+           %{
+             value: formatted_answer,
+             correct: true
+           }
+         )
       |> clear_answers
     else
       game
       |> Map.put(:turn, next_username(game, username)) # next player picks next question
       |> Map.put(:completed, mark_question_completed(game.completed, game.question))
+      |> Map.put(
+           :last_answer,
+           %{
+             value: formatted_answer,
+             correct: false
+           }
+         )
       |> Map.put(:question, nil)
       |> clear_answers
     end
@@ -109,7 +150,7 @@ defmodule Jeopardy.Game do
   defp next_username(game, username) do
     players = Map.keys(game.players)
     idx = Enum.find_index(players, fn name -> name == username end)
-    idx = rem(length(players), idx + 1)
+    idx = rem(idx + 1, length(players))
     Enum.at(players, idx)
   end
 
@@ -117,7 +158,11 @@ defmodule Jeopardy.Game do
     %{question.category => [Integer.to_string(question.value)]}
   end
   defp mark_question_completed(completed, question) do
-    Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
+    Map.put(
+      completed,
+      question.category,
+      [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])]
+    )
   end
 
   def clear_answers(game) do
@@ -131,13 +176,8 @@ defmodule Jeopardy.Game do
   def correct_answer?(game, nil), do: false
   def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
-    answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
-                     |> String.downcase
-
-    IO.puts correct_answer
-    # TODO space-separate both, then check if any words match
-    correct_answer =~ answer || answer =~ correct_answer
+    AnswerChecker.is_correct?(answer, correct_answer)
   end
 
   def get_numbers(game) do
@@ -150,7 +190,16 @@ defmodule Jeopardy.Game do
     if game_over?(game) do
       game.players
       |> Map.values
-      |> Enum.reduce(%{score: -1}, fn player, acc -> if(player.score > acc.score) do player else acc end end)
+      |> Enum.reduce(
+           %{score: -1},
+           fn player, acc ->
+             if(player.score > acc.score) do
+               player
+             else
+               acc
+             end
+           end
+         )
     else
       nil
     end
@@ -201,12 +250,14 @@ defmodule Jeopardy.Game do
   end
 
   def phone_to_username(game, number) do
-    {name, player} = hd(Enum.filter(
-      game.players,
-      fn {name, player} ->
-        number == player.phone_number
-      end
-    ))
+    {name, player} = hd(
+      Enum.filter(
+        game.players,
+        fn {name, player} ->
+          number == player.phone_number
+        end
+      )
+    )
     name
   end
 end
