@@ -81,8 +81,8 @@ defmodule Jeopardy.GameServer do
     update_and_broadcast(game, game_name)
   end
 
-  def handle_call({:start_game, game_name, user_id}, _from, _state) do
-    game = Game.start_game(get_game(game_name), user_id)
+  def handle_call({:start_game, game_name}, _from, _state) do
+    game = Game.start_game(get_game(game_name))
     update_and_broadcast(game, game_name)
   end
 
@@ -97,6 +97,14 @@ defmodule Jeopardy.GameServer do
     |> Game.set_answer(username, answer)
     |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:end_game, game_name}, _from, _state) do
+    game = get_game(game_name)
+    numbers = Game.get_numbers(game)
+    |> Enum.each(&(BackupAgent.remove(&1)))
+    
+    Game.end_game(game)
   end
 
   defp update_and_broadcast(game, game_name) do

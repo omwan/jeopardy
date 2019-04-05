@@ -12,8 +12,8 @@ defmodule Jeopardy.Game do
       question: nil, # the current question, %{category: "", value: ""}
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
-      active: false
-      host_id: nil
+      active: false,
+      host_id: nil,
       # map of Player objects, keyed by username
     }
   end
@@ -59,6 +59,7 @@ defmodule Jeopardy.Game do
   end
 
   def set_host_id(game, host_id) do
+    IO.inspect(host_id)
     game
     |> Map.put(:host_id, host_id)
   end
@@ -125,6 +126,12 @@ defmodule Jeopardy.Game do
     Jeopardy.Records.create_record(%{player: winner, score: score})
   end
 
+  def get_numbers(game) do
+    game.players
+    |> Map.values
+    |> Enum.map(&(&1.phone_number))
+  end
+
   def who_won(game) do
     winner = game.players
              |> Map.values
@@ -163,9 +170,13 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
-    game.completed
-    |> Map.values
-    |> Enum.each(&(length(&1) == 5))
+    if (game.completed != nil) do
+      game.completed
+      |> Map.values
+      |> Enum.each(&(length(&1) == 5))
+    else
+      false
+    end
   end
 
   # DO THE JEOPARDY API
