@@ -182,8 +182,8 @@ defmodule Jeopardy.Game do
 
   def game_over?(game) do
     if (game.completed != nil) do
-      IO.inspect(game.completed)
       game.completed
+      |> (fn c -> if (Map.size(c) == 6) do c else %{error: %{}} end end).()
       |> Map.values
       |> Enum.all?(&(length(&1) == 5))
     else
