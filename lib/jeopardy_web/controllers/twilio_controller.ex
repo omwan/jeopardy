@@ -31,8 +31,8 @@ defmodule JeopardyWeb.TwilioController do
     #      from: twilio_response.from
     #    }
     conn
-    |> put_resp_header("content-type", "application/json; charset=UTF-8")
-    |> send_resp(:created, Jason.encode!(response))
+    |> put_resp_header("content-type", "application/xml")
+    |> send_resp(:created, "")
   end
 
 end

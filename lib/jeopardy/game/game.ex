@@ -2,6 +2,7 @@ defmodule Jeopardy.Game do
 
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
+  alias Jeopardy.AnswerChecker
 
   @num_players 2 # TODO increase this
 
@@ -83,7 +84,8 @@ defmodule Jeopardy.Game do
     category_completed = game.completed[category]
     question_already_answered? = category_completed != nil and
                                  Enum.member?(category_completed, parse_score(value))
-    correct_user? and not question_already_answered?
+    valid_value = rem(value, 200) == 0 and value / 200 >= 1 and value / 200 <= 5
+    correct_user? and not question_already_answered? and valid_value
   end
 
   def new_question(game, category, value) do
@@ -99,6 +101,9 @@ defmodule Jeopardy.Game do
   end
 
   def check_answer(game, username, answer) do
+    formatted_answer = Board.get_answer(game.board, game.question.category, game.question.value)
+                       |> AnswerChecker.remove_tags
+                       |> String.replace("\\'", "\'")
     if correct_answer?(game, answer) do
       player = Map.get(game.players, username)
                |> Player.add_to_score(parse_score(game.question.value))
@@ -111,7 +116,7 @@ defmodule Jeopardy.Game do
       |> Map.put(
            :last_answer,
            %{
-             value: Board.get_answer(game.board, game.question.category, game.question.value),
+             value: formatted_answer,
              correct: true
            }
          )
@@ -123,7 +128,7 @@ defmodule Jeopardy.Game do
       |> Map.put(
            :last_answer,
            %{
-             value: Board.get_answer(game.board, game.question.category, game.question.value),
+             value: formatted_answer,
              correct: false
            }
          )
@@ -145,7 +150,7 @@ defmodule Jeopardy.Game do
   defp next_username(game, username) do
     players = Map.keys(game.players)
     idx = Enum.find_index(players, fn name -> name == username end)
-    idx = rem(length(players), idx + 1)
+    idx = rem(idx + 1, length(players))
     Enum.at(players, idx)
   end
 
@@ -174,10 +179,7 @@ defmodule Jeopardy.Game do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
                      |> String.downcase
-
-    IO.puts correct_answer
-    # TODO space-separate both, then check if any words match
-    correct_answer =~ answer || answer =~ correct_answer
+    AnswerChecker.is_correct?(answer, correct_answer)
   end
 
   def get_numbers(game) do
@@ -234,7 +236,6 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
-    #    map_size(game.players) == @num_players
     Board.all_done?(game.board, game.completed)
   end
 
