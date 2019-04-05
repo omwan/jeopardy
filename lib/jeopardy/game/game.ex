@@ -85,7 +85,6 @@ defmodule Jeopardy.Game do
     question_already_answered? = category_completed != nil and
                                  Enum.member?(category_completed, to_string(value))
     valid_value = rem(value, 200) == 0 and value / 200 >= 1 and value / 200 <= 5
-    IO.inspect(question_already_answered?)
     correct_user? and not question_already_answered? and valid_value
   end
 
@@ -177,9 +176,7 @@ defmodule Jeopardy.Game do
   def correct_answer?(game, nil), do: false
   def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
-    answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
-                     |> String.downcase
     AnswerChecker.is_correct?(answer, correct_answer)
   end
 
