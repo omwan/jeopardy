@@ -9,7 +9,7 @@ function Lobby(props) {
     let title = "Join Game";
 
     let joinGame = function () {
-        channel.join(joinGameInput, session.token, session.username);
+        channel.join(joinGameInput, session.token, session.username, session.user_id);
     };
 
     let update = function (event) {

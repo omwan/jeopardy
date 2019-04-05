@@ -32,7 +32,7 @@ function Jeopardy(props) {
         body = <div>Must be logged in to view game</div>;
     } else if (!gameState) {
         if (!gameName) {
-            channel.join(name, session.token, session.username);
+            channel.join(name, session.token, session.username, session.user_id);
         }
         body = <div>Loading your game</div>;
     } else {

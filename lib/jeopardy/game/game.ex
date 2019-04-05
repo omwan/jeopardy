@@ -12,7 +12,8 @@ defmodule Jeopardy.Game do
       question: nil, # the current question, %{category: "", value: ""}
       completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
       players: %{},
-      active: false
+      active: false,
+      host_id: nil,
       # map of Player objects, keyed by username
     }
   end
@@ -59,6 +60,11 @@ defmodule Jeopardy.Game do
     else
       game
     end
+  end
+
+  def set_host_id(game, host_id) do
+    game
+    |> Map.put(:host_id, host_id)
   end
 
   # Answering Questions ----------------------------------------------------------------------------

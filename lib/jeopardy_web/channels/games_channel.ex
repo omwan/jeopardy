@@ -5,10 +5,11 @@ defmodule JeopardyWeb.GamesChannel do
 
   def join("games:" <> game, payload, socket) do
     username = Map.get(payload, "username")
+    user_id = Map.get(payload, "user_id")
 
     if authorized?(payload) do
       socket = assign(socket, :game, game)
-      GameServer.join(game, username)
+      GameServer.join(game, username, user_id)
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}

@@ -31,11 +31,11 @@ defmodule Jeopardy.GameServer do
     {:ok, state}
   end
 
-  def join(game_name, player_name) do
+  def join(game_name, player_name, user_id) do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end
-    GenServer.cast(reg(game_name), {:join, game_name})
+    GenServer.cast(reg(game_name), {:join, game_name, user_id})
   end
 
   def game_exists?(game_name) do
@@ -95,8 +95,8 @@ defmodule Jeopardy.GameServer do
 
   # Server Logic
 
-  def handle_cast({:join, game_name}, _state) do
-    game = get_game(game_name)
+  def handle_cast({:join, game_name, user_id}, _state) do
+    game = Game.set_host_id(get_game(game_name), user_id)
     BackupAgent.put(game_name, game)
     broadcast(game, game_name)
     {:noreply, game}
