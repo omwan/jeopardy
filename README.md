@@ -44,3 +44,11 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Users can only edit their own accounts information
   * Users must be logged in to edit their accounts
   * User passwords must be at least 8 characters long, and contain both upper and lower-case characters, as well as at least one number
+
+## Modified Jeopardy Rules
+For ease of implementation, we chose to slightly modify the rules of Jeopardy. 
+
+  * In normal Jeopardy, players must phrase their answers in the form of a question. In our implementation, they can omit the "What is/are..." and simply submit their answer without phrasing it as a question.
+  * In normal Jeopardy, players must race to buzz in before answering a question. In our implementation, players race to submit their answer as quickly as they can. The first person to type and submit their answer will get their answer checked.
+  * In normal Jeopardy, if the player that buzzed answers incorrectly, the player who buzzed the second-fastest gets to try to answer the question. In our implementation, if the first person to submit their answer was wrong, no one gets that point and the question cannot be answered again.
+  * In normal Jeopardy, the last round consists of "Final Jeopardy", where contestants can wager up to all of their score, and all contestants have the chance to submit an answer for the last question. Our implementation does not include Final Jeopardy.

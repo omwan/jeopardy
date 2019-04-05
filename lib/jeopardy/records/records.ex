@@ -50,6 +50,7 @@ defmodule Jeopardy.Records do
 
   """
   def create_record(attrs \\ %{}) do
+    IO.inspect(attrs)
     %Record{}
     |> Record.changeset(attrs)
     |> Repo.insert()

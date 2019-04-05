@@ -34,6 +34,12 @@ defmodule JeopardyWeb.GamesChannel do
     {:noreply, socket}
   end
 
+  def handle_in("end_game", _payload, socket) do
+    game_name = socket.assigns[:game]
+    GameServer.end_game(game_name)
+    {:noreply, socket}
+  end
+
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("ping", payload, socket) do

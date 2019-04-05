@@ -75,6 +75,8 @@ function joinGameInput(state = "", action) {
     switch (action.type) {
         case 'UPDATE_GAME_NAME':
             return action.data;
+        case 'CLEAR_GAME_NAME':
+            return "";
         default:
             return state;
     }
@@ -89,11 +91,21 @@ function answerInput(state = "", action) {
     }
 }
 
+function records(state = [], action) {
+    switch (action.type) {
+        case 'UPDATE_RECORDS':
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function rootReducer(state, action) {
     let reducer = combineReducers({
         session, loginForm, gameName,
         alert, newUserForm, editUserForm,
-        gameState, joinGameInput, answerInput
+        gameState, joinGameInput, answerInput,
+        records
     });
 
     let newState = reducer(state, action);

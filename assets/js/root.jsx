@@ -28,6 +28,7 @@ class Root extends React.Component {
         super(props);
         api.fetchSession();
         api.fetchGame();
+        api.fetchAllRecords();
     }
 
     render() {

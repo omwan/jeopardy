@@ -35,7 +35,11 @@ defmodule Jeopardy.GameServer do
     if (length(Registry.lookup(Jeopardy.GameReg, game_name)) == 0) do
       start_link(game_name)
     end
+<<<<<<< HEAD
     GenServer.cast(reg(game_name), {:join, game_name, player_name, user_id})
+=======
+    GenServer.cast(reg(game_name), {:join, game_name, user_id})
+>>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def game_exists?(game_name) do
@@ -83,11 +87,31 @@ defmodule Jeopardy.GameServer do
     GenServer.call(reg(game_name), {:answer, game_name, username, answer})
   end
 
+  def end_game(game_name) do
+    IO.puts("ending " <> game_name)
+    game = get_game(game_name)
+    Game.get_numbers(game)
+    |> Enum.each(&(BackupAgent.remove(&1)))
+    winner = Game.get_winner(game)
+    IO.inspect(winner)
+    Jeopardy.Records.create_record(%{player: winner.name, score: winner.score, user_id: game.host_id})
+    Registry.unregister(Jeopardy.GameReg, game_name)
+    BackupAgent.remove(game_name)
+    # TODO remove mapping from phone number to game name
+    GenServer.cast(reg(game_name), {:end, game_name})
+  end
+
   # Server Logic
 
-  def handle_cast({:join, game_name, player_name, user_id}, _state) do
+  def handle_cast({:join, game_name, user_id}, _state) do
     game = Game.set_host_id(get_game(game_name), user_id)
-    BackupAgent.put(game_name, get_game(game_name))
+    BackupAgent.put(game_name, game)
+    broadcast(game, game_name)
+    {:noreply, game}
+  end
+
+  def handle_cast({:end, game_name}, _state) do
+    game = Game.new()
     broadcast(game, game_name)
     {:noreply, game}
   end
@@ -109,9 +133,9 @@ defmodule Jeopardy.GameServer do
 
   def handle_call({:answer, game_name, username, answer}, _from, _state) do
     game = get_game(game_name)
-    # if (game.turn == username) do # TODO
-    |> Game.set_answer(username, answer)
-    |> Game.check_answer(username, answer)
+           # if (game.turn == username) do # TODO
+           |> Game.set_answer(username, answer)
+           |> Game.check_answer(username, answer)
     update_and_broadcast(game, game_name)
   end
 

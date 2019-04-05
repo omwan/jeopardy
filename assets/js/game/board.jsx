@@ -24,28 +24,38 @@ function Board(props) {
 
 function Category(props) {
     let {name, category, letter} = props;
-    let values = _.sortBy(_.map(category, function(value) {
-        if (value === "") {
-            return "";
-        } else {
-            return parseInt(value);
-        }
-    }));
+    let values = _.sortBy(_.map(category, (status) => {
+        return {"completed": status.completed, "value": parseInt(status.value)}; 
+    }), ['value']);
 
     return <div className="category">
         <div className="title-card card">{letter}: {name}</div>
-        {_.map(values, (points, idx) => <Card key={idx} category={name} points={points} />)}
+        {_.map(values, (status, idx) => <Card key={idx} category={name} status={status} />)}
     </div>
 }
 
 function Card(props) {
-    return <div className="question-card card"
-                onClick={() => api.showQuestion(props.category, props.points)}>{props.points}</div>;
+    let {category, status} = props;
+
+    let onClick = function() {
+        if (status.completed) {
+            return;
+        } else {
+            api.showQuestion(category, status.value);
+        }
+    }
+
+    return <div className={"question-card card " + (status.completed ? "disabled" : "")} onClick={onClick}>
+        {status.completed ? "" : status.value}
+    </div>;
 }
 
 Card.propTypes = {
     category: PropTypes.string,
-    points: PropTypes.number
+    status: PropTypes.shape({
+        value: PropTypes.number,
+        completed: PropTypes.bool
+  }),
 };
 
 function stateToProps(state) {

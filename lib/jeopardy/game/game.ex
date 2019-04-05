@@ -22,6 +22,7 @@ defmodule Jeopardy.Game do
     %{
       game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
       turn: game.turn,
+      winner: get_winner(game),
       question: question_client_view(game, game.question),
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players)
@@ -34,7 +35,11 @@ defmodule Jeopardy.Game do
 
   defp question_client_view(_game, nil), do: nil
   defp question_client_view(game, question) do
-    Board.get_question(game.board, question.category, question.value)
+    %{
+      category: question.category,
+      value: question.value,
+      question: Board.get_question(game.board, question.category, question.value)
+    }
   end
 
   # Joining ----------------------------------------------------------------------------------------
@@ -59,7 +64,6 @@ defmodule Jeopardy.Game do
   end
 
   def set_host_id(game, host_id) do
-    IO.inspect(host_id)
     game
     |> Map.put(:host_id, host_id)
   end
@@ -79,21 +83,23 @@ defmodule Jeopardy.Game do
   end
 
   def check_answer(game, username, answer) do
+    IO.inspect(game.completed)
     if correct_answer?(game, answer) do
-      question = game.question
-
       player = Map.get(game.players, username)
-               |> Player.add_to_score(parse_score(question.value))
+               |> Player.add_to_score(parse_score(game.question.value))
 
       game
       |> Map.put(:turn, username) # user who answers correctly gets to pick next question
       |> Map.put(:players, Map.put(game.players, username, player))
-      |> Map.put(:completed, update_completed(game.completed, question))
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
       |> Map.put(:question, nil)
       |> clear_answers
     else
-      # TODO mark that a player has guessed incorrectly and check the next answer??
       game
+      |> Map.put(:turn, next_username(game, username)) # next player picks next question
+      |> Map.put(:completed, mark_question_completed(game.completed, game.question))
+      |> Map.put(:question, nil)
+      |> clear_answers
     end
   end
 
@@ -106,12 +112,28 @@ defmodule Jeopardy.Game do
     end
   end
 
+<<<<<<< HEAD
   defp update_completed(nil, question) do
     %{question.category => [to_string(question.value)]}
   end
   defp update_completed(completed, question) do
     Map.put(completed, question.category,
       [to_string(question.value) | (Map.get(completed, question.category) || [])])
+=======
+  # get the username of the next player after the given one
+  defp next_username(game, username) do
+    players = Map.keys(game.players)
+    idx = Enum.find_index(players, fn name -> name == username end)
+    idx = rem(length(players), idx + 1)
+    Enum.at(players, idx)
+  end
+
+  defp mark_question_completed(nil, question) do
+    %{question.category => [Integer.to_string(question.value)]}
+  end
+  defp mark_question_completed(completed, question) do
+    Map.put(completed, question.category, [Integer.to_string(question.value) | (Map.get(completed, question.category) || [])])
+>>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def clear_answers(game) do
@@ -122,27 +144,33 @@ defmodule Jeopardy.Game do
     Map.put(game, :players, players)
   end
 
+  def correct_answer?(game, nil), do: false
+  def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
                      |> String.downcase
 
     IO.puts correct_answer
-    # check if one is a substring of the other ¯\_(ツ)_/¯
+    # TODO space-separate both, then check if any words match
     correct_answer =~ answer || answer =~ correct_answer
   end
 
+<<<<<<< HEAD
   def end_game(game) do
     {winner, score} = who_won(game)
     Jeopardy.Records.create_record(%{player: winner, score: score})
   end
 
+=======
+>>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   def get_numbers(game) do
     game.players
     |> Map.values
     |> Enum.map(&(&1.phone_number))
   end
 
+<<<<<<< HEAD
   def who_won(game) do
     winner = game.players
              |> Map.values
@@ -150,6 +178,16 @@ defmodule Jeopardy.Game do
                   if (p.score > acc.score) do p else acc end end)
     IO.inspect(winner)
     {winner.name, winner.score}
+=======
+  def get_winner(game) do
+    if game_over?(game) do
+      game.players
+      |> Map.values
+      |> Enum.reduce(%{score: -1}, fn player, acc -> if(player.score > acc.score) do player else acc end end)
+    else
+      nil
+    end
+>>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   # Game Status ------------------------------------------------------------------------------------
@@ -181,6 +219,7 @@ defmodule Jeopardy.Game do
   end
 
   def game_over?(game) do
+<<<<<<< HEAD
     if (game.completed != nil) do
       game.completed
       |> (fn c -> if (Map.size(c) == 6) do c else %{error: %{}} end end).()
@@ -189,6 +228,9 @@ defmodule Jeopardy.Game do
     else
       false
     end
+=======
+    Board.all_done?(game.board, game.completed)
+>>>>>>> 7f4f70a02d1d06f05a81f924a80aef263aedecc1
   end
 
   def coordinate_to_category(game, coordinate) do
@@ -212,5 +254,4 @@ defmodule Jeopardy.Game do
     ))
     name
   end
-
 end

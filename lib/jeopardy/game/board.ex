@@ -7,15 +7,15 @@ defmodule Jeopardy.Game.Board do
   end
 
   # Produces object of this shape:
-  # { "category1" => ["200", "400", "600", "800", "1000"], "category2" => ["200", "400", "600", "800", "1000"]}
+  # { "category1" => [{value: "200", completed: #f}, {value: "400", completed: #f}, {value: "600", completed: #f}], {value: "800", completed: #f}, {value: "1000", completed: #f}], ...}
   def client_view(board, nil) do
     board
-    |> Enum.map(fn {category, values} -> %{category => Enum.map(values, fn {value, _qa} -> value end)} end)
+    |> Enum.map(fn {category, values} -> %{category => Enum.map(values, fn {value, _qa} -> %{value: value, completed: false} end)} end)
     |> Enum.reduce(%{}, fn category, acc -> Map.merge(category, acc) end)
   end
 
-  # Produces object of this shape, with past_questions hidden:
-  # { "category1" => ["200", "", "600", "", "1000"], "category2" => ["200", "", "600", "800", "1000"]}
+  # Produces object of this shape, with past_questions marked completed:
+  # { "category1" => [{value: "200", completed: #t}, {value: "400", completed: #f}, {value: "600", completed: #f}], {value: "800", completed: #f}, {value: "1000", completed: #f}], ...}
   def client_view(board, past_questions) do
     IO.inspect(past_questions)
     board
@@ -23,7 +23,8 @@ defmodule Jeopardy.Game.Board do
         vals = Enum.map(values, fn {value, _qa} -> 
           # check if category/value combination appears in past_questions
           cat = Map.get(past_questions, category)
-          if cat && Enum.member?(cat, value), do: "", else: value
+          completed = cat && Enum.member?(cat, value)
+          %{value: value, completed: completed}
         end)
         %{category => vals} 
       end)
@@ -40,5 +41,16 @@ defmodule Jeopardy.Game.Board do
 
   defp get_category(board, category, value) do
     board[category][to_string(value)]
+  end
+
+  def all_done?(_board, nil), do: false
+  def all_done?(board, past_questions) do
+    board
+    |> Enum.all?(fn {category, values} -> 
+        Enum.all?(values, fn {value, _qa} -> 
+          cat = Map.get(past_questions, category)
+          cat && Enum.member?(cat, value)
+        end)
+      end)
   end
 end

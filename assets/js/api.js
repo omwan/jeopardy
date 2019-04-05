@@ -129,6 +129,23 @@ class Server {
     answerQuestion(username, answer) {
         channel.push("answer", {username: username, answer: answer});
     }
+
+    endGame() {
+        store.dispatch({
+            type: "CLEAR_GAME_NAME"
+        });
+
+        channel.push("end_game");
+    }
+
+    fetchAllRecords() {
+        this.fetchPath("/api/v1/records", function(response) {
+            store.dispatch({
+                type: "UPDATE_RECORDS",
+                data: response.data
+            })
+        });
+    }
 }
 
 export default new Server();
