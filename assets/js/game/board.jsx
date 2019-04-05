@@ -14,20 +14,23 @@ function Board(props) {
     let board = _.map(gameState.board, function (c, name) {
         let letter = letters[i];
         i++;
-        return <Category key={name} category={c} name={name} letter={letter}/>;
+        return <Category key={name} category={c} name={name} letter={letter} turn={gameState.turn}/>;
     });
 
     let turn = gameState.turn;
-    let answer = function() {
-        if (gameState.last_answer.correct) {
-            return `${gameState.turn} correctly answered \"${gameState.last_answer.value}\"`;
+    let answer = function () {
+        if (gameState.last_answer.value === "") {
+            return <span></span>;
+        } else if (gameState.last_answer.correct) {
+            return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}"<br/></span>;
         } else {
-            return `The correct answer is \"${gameState.last_answer.value}\"`;
+            return <span>The correct answer is "{gameState.last_answer.value}"<br/></span>;
         }
     };
 
     return <div>
-        {answer()}, it's now {turn}'s turn.
+        {answer()}
+        It's {turn}'s turn to pick a question.
         <div className="board">
             {board}
         </div>
@@ -42,18 +45,20 @@ function Category(props) {
 
     return <div className="category">
         <div className="title-card card">{letter}: {name}</div>
-        {_.map(values, (status, idx) => <Card key={idx} category={name} status={status}/>)}
+        {_.map(values, function(status, idx) {
+            return <Card key={idx} category={name} status={status} turn={props.turn}/>;
+        })}
     </div>
 }
 
 function Card(props) {
-    let {category, status} = props;
+    let {category, status, turn} = props;
 
     let onClick = function () {
         if (status.completed) {
             return;
         } else {
-            api.showQuestion(category, status.value);
+            api.showQuestion(turn, category, status.value);
         }
     };
 
