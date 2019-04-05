@@ -135,6 +135,8 @@ defmodule Jeopardy.Game do
     Map.put(game, :players, players)
   end
 
+  def correct_answer?(game, nil), do: false
+  def correct_answer?(game, ""), do: false
   def correct_answer?(game, answer) do
     answer = String.downcase(answer)
     correct_answer = Board.get_answer(game.board, game.question.category, game.question.value)
