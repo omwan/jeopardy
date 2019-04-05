@@ -90,7 +90,7 @@ defmodule Jeopardy.GameServer do
     |> Enum.each(&(BackupAgent.remove(&1)))
     winner = Game.get_winner(game)
     IO.inspect(winner)
-    Jeopardy.Records.create_record(%{name: winner.name, score: winner.score, user_id: game.host_id})
+    Jeopardy.Records.create_record(%{player: winner.name, score: winner.score, user_id: game.host_id})
     Registry.unregister(Jeopardy.GameReg, game_name)
     BackupAgent.remove(game_name)
     # TODO remove mapping from phone number to game name
