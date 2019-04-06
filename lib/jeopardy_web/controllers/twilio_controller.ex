@@ -9,7 +9,6 @@ defmodule JeopardyWeb.TwilioController do
 
   def receive(conn, %{"From" => from, "Body" => body}) do
     game = GameServer.get_game_from_phone_number(from)
-    IO.puts GameServer.get_game_state(game)
     if game do
       case GameServer.get_game_state(game) do
         "JOINING" ->

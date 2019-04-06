@@ -20,7 +20,7 @@ function Board(props) {
     let turn = gameState.turn;
     let answer = function () {
         if (gameState.last_answer.value === "") {
-            return <span><br/></span>;
+            return <span></span>;
         } else if (gameState.last_answer.correct) {
             return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}."<br/></span>;
         } else {

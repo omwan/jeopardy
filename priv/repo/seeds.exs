@@ -35,7 +35,8 @@ Repo.insert!(
   %Record{
     player: "olivia",
     score: 200,
-    user: a
+    user: a,
+    game: "demo"
   }
 )
 
@@ -43,6 +44,7 @@ Repo.insert!(
   %Record{
     player: "brendan",
     score: 400,
-    user: a
+    user: a,
+    game: "test"
   }
 )
