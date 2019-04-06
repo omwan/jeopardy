@@ -5,6 +5,7 @@ import api from '../api';
 
 function AnswerQuestion(props) {
     let {dispatch, question, input} = props;
+    let number = window.number || "NUMBER";
 
     let handleSubmit = function(ev) {
         ev.preventDefault();
@@ -19,20 +20,15 @@ function AnswerQuestion(props) {
         });
     }
 
-    return <div>
-        <div className="question">
-            <h4>{question.question}</h4>
+    return <div className="question-container">
+        <div className="question-details">
+            <h4><span className="category mb-0">{question.category}:</span> <span className="value">{question.value}</span></h4>
         </div>
-        <div className="question-details question-category">
-            <h4>Category: {question.category}</h4>
+        <div className="question-wrapper mt-2">
+            <h4 className="question">{question.question}</h4>
         </div>
-        <div className="question-details question-value">
-            <h4>Value: {question.value}</h4>
-        </div>
-        <div className="submission mt-5">
-            <h3>Text Your Answer to: {"TODO PHONE #"}</h3>
-            <h3>OR</h3>
-            <h3>Submit Your Answer</h3>
+        <div className="question-instruction mt-4"><h4>Text Your Answer, What is/are: "________", to: {number}</h4></div>
+        {/*<div className="submission mt-5">
             <form onSubmit={handleSubmit} className="form-inline" >
                 <label className="mr-2">What is/are...</label>
                 <input type="text" 
@@ -42,7 +38,7 @@ function AnswerQuestion(props) {
                 <input type="submit" 
                        className="btn btn-primary" />
             </form>
-        </div>
+        </div>*/}
     </div>;
 }
 

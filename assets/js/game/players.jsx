@@ -6,8 +6,8 @@ function Players(props) {
 
     players = _.map(players, function (player, idx) { 
         return <div key={idx} className="player">
-            <h5>{player.name}</h5>
-            <h4 className="points">${player.score}</h4>
+            <div className="name">{player.name}</div>
+            <div className="score">${player.score}</div>
         </div>; 
     });
 

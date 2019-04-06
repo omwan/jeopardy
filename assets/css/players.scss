@@ -2,10 +2,12 @@
   display: flex;
   justify-content: center;
   margin: 1rem auto;
+  font-size: x-large;
 }
 
 .player {
-  border: 1px solid white;
+  background-color: rgba(0,0,153,0.5);
+  border: 2px solid black;
   border-radius: 4px;
   padding: 1rem;
   margin: .5rem;

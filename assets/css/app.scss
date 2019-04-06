@@ -3,6 +3,7 @@
 $body-bg: inherit;
 $body-color: white;
 
+@import "fonts.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
 @import "game.scss";
@@ -24,6 +25,7 @@ html {
 }
 
 body {
+    font-family: "ITC Korinna Std";
     height: inherit;
     min-height: 100%;
     padding: 0;
@@ -34,11 +36,63 @@ a {
     color: yellow;
 }
 
+.leaderboard-container {
+    font-size: larger;
+    width: 80%;
+    margin-left: 15px;
+}
+
+@media only screen and (min-width: 1000px) {
+    .leaderboard-container {
+        width: 50%;
+    }
+}
+
+.question-details, .leaderboard, .player {
+    text-align: center;
+    font-family: "Swiss 911";
+    letter-spacing: 2px;
+
+    th {
+        font-weight: 200;
+        font-size: x-large;
+    }
+    .value, .score {
+            font-weight: 400;
+            color: goldenrod;
+        }
+
+    .category {
+        text-transform: uppercase;
+        font-weight: 200;
+        color: lightblue;
+    }
+
+    .name {
+        font-weight: 200;
+        color: lightblue;
+        font-family: "ITC Korinna Std";
+
+    }
+
+    .game {
+        font-weight: 200;
+        font-family: "ITC Korinna Std";
+        color: white;
+    }
+}
+
 .submission {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    div {
+        letter-spacing: 1px;
+        font-family: 'Swiss 911';
+        font-size: larger;
+    }
 }
 
 .joining, .game-over {
@@ -48,4 +102,9 @@ a {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.state-text {
+    height: 50px;
+    margin-bottom: 10px;
 }
