@@ -6,7 +6,6 @@ import Records from '../game/records';
 
 function ShowUser(props) {
   let {id, session, records} = props;
-  let title = "Your Account";
   let edit;
 
   if (session.user_id == id) {
@@ -14,7 +13,7 @@ function ShowUser(props) {
   }
 
   return <div className="show-user">
-    <h4>Your account info:</h4>
+    <h4>Account info:</h4>
     <div className="email">Email: {session.username}</div> 
 
     <div className="row">
