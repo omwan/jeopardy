@@ -23,7 +23,7 @@ function AnswerQuestion(props) {
         <h4 className="question-details"><span className="category">{question.category}:</span> <span className="value">{question.value}</span></h4>
         <h4 className="question">{question.question}</h4>
         <div className="submission mt-5">
-            <div>Text Your Answer to: {"TODO PHONE #"}</div>
+            <div>Text Your Answer to: {window.number}</div>
             <div>OR</div>
             <div>Submit Your Answer</div>
             <form onSubmit={handleSubmit} className="form-inline" >
