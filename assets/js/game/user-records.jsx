@@ -2,11 +2,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Record from './record';
 
-function Records(props) {
-    let {records} = props;
+function UserRecords(props) {
+    let {records, id} = props;
 
     let recordList = _.map(records, function (record, ii) {
         console.log(JSON.stringify(record));
+        if (record.user_id != id) {
+            return;
+        }
         return <Record key={ii} record={record}/>;
     });
 
@@ -32,4 +35,4 @@ function stateToProps(state) {
     };
 }
 
-export default connect(stateToProps)(Records);
+export default connect(stateToProps)(UserRecords);
