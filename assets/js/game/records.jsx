@@ -14,6 +14,7 @@ function Records(props) {
             <tr>
                 <th>Name</th>
                 <th>Score</th>
+                <th>Game</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@ function Record(props) {
     return <tr>
         <td className="name">{record.player}</td>
         <td className="score">{record.score}</td>
+        <td className="game">{record.game}</td>
     </tr>
 }
 
