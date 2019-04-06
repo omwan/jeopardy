@@ -9,9 +9,8 @@ $body-color: white;
 @import "board.scss";
 @import "players.scss";
 
-body, html {
+body {
   font-family: "ITC Korinna Std";
-  background-size:cover;
 }
 
 a {
