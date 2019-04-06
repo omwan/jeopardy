@@ -22,15 +22,19 @@ function Board(props) {
         if (gameState.last_answer.value === "") {
             return <span></span>;
         } else if (gameState.last_answer.correct) {
-            return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}"<br/></span>;
+            return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}."<br/></span>;
         } else {
-            return <span>The correct answer is "{gameState.last_answer.value}"<br/></span>;
+            return <span>The correct answer is "{gameState.last_answer.value}."<br/></span>;
         }
     };
 
     return <div>
-        {answer()}
-        It's {turn}'s turn to pick a question.
+        <div className="state-text">
+            {answer()}
+            <span>
+                It's {turn}'s turn to pick a question.
+            </span>
+        </div>
         <div className="board">
             {board}
         </div>
