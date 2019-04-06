@@ -1,6 +1,6 @@
 /* This file is for your main application css. */
 
-$body-bg: darken(blue, 10%);
+$body-bg: inherit;
 $body-color: white;
 
 @import "~bootstrap/scss/bootstrap";
@@ -10,9 +10,24 @@ $body-color: white;
 @import "header.scss";
 @import "fonts.scss";
 
-html, body {
+* {
+    box-sizing: border-box;
+}
+
+html {
+    
+    min-height: 100%;
+    height: 100%;
+    height: auto;
     background-image: linear-gradient(darkblue, rgb(205,73,130));
     background-size: cover;
+}
+
+body {
+    height: inherit;
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 a {
