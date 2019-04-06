@@ -43,10 +43,17 @@ a {
             color: goldenrod;
         }
         
-    .category, .name {
+    .category {
         text-transform: uppercase;
         font-weight: 200;
         color: lightblue;
+    }
+
+    .name {
+        font-weight: 200;
+        color: lightblue;
+        font-family: "ITC Korinna Std";
+
     }
 }
 
@@ -70,4 +77,9 @@ a {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.state-text {
+    height: 50px;
+    margin-bottom: 10px;
 }
