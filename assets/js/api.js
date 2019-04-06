@@ -116,6 +116,16 @@ class Server {
         );
     }
 
+    deleteUser(userid) {
+        this.sendDelete("/api/v1/users/" + userid,
+            function(response) {
+                store.dispatch({
+                    type: "NEW_ALERT",
+                    data: {type: "info", message: "Deleted user"}
+                });
+            });
+    }
+
     fetchGame() {
         if (window.session !== null) {
             channel.connect(window.session.token, window.session.username);
