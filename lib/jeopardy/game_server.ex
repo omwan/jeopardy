@@ -90,7 +90,7 @@ defmodule Jeopardy.GameServer do
     game = get_game(game_name)
     remove_phone_numbers(game)
     winner = Game.get_winner(game)
-    create_winner_record(winner, user_id)
+    create_winner_record(winner, game_name, user_id)
     unregister_game(game_name)
     GenServer.cast(reg(game_name), {:end, game_name})
   end
@@ -100,11 +100,12 @@ defmodule Jeopardy.GameServer do
     |> Enum.each(&(BackupAgent.remove(&1)))
   end
 
-  defp create_winner_record(winner, user_id) do
+  defp create_winner_record(winner, game_name, user_id) do
     record = %{
       player: winner.name,
       score: winner.score,
-      user_id: user_id
+      user_id: user_id,
+      game: game_name
     }
     Jeopardy.Records.create_record(record)
   end
