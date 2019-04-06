@@ -3,20 +3,51 @@
 $body-bg: darken(blue, 10%);
 $body-color: white;
 
+@import "fonts.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
 @import "board.scss";
-@import "fonts.scss";
 @import "players.scss";
+
+body {
+  font-family: "ITC Korinna Std";
+}
 
 a {
     color: yellow;
 }
 
-.question {
+.leaderboard-container {
+    font-size: larger;
+    width: 80%;
+    margin-left: 15px;
+}
+
+@media only screen and (min-width: 1000px) {
+    .leaderboard-container {
+        width: 50%;
+    }
+}
+
+.question-details, .leaderboard, .player {
     text-align: center;
-    margin-top: 200px;
-    font-family: 'ITC Korinna Std';
+    font-family: "Swiss 911";
+    letter-spacing: 2px;
+
+    th {
+        font-weight: 200;
+        font-size: x-large;
+    }
+    .value, .score {
+            font-weight: 400;
+            color: goldenrod;
+        }
+        
+    .category, .name {
+        text-transform: uppercase;
+        font-weight: 200;
+        color: lightblue;
+    }
 }
 
 .submission {
@@ -24,6 +55,12 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    div {
+        letter-spacing: 1px;
+        font-family: 'Swiss 911';
+        font-size: larger;
+    }
 }
 
 .game-over {

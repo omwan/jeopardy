@@ -19,14 +19,13 @@ function AnswerQuestion(props) {
         });
     }
 
-    return <div>
-        <h4>Question: {question.question}</h4>
-        <h4>Category: {question.category}</h4>
-        <h4>Value: {question.value}</h4>
+    return <div className="question-container">
+        <h4 className="question-details"><span className="category">{question.category}:</span> <span className="value">{question.value}</span></h4>
+        <h4 className="question">{question.question}</h4>
         <div className="submission mt-5">
-            <h3>Text Your Answer to: {"TODO PHONE #"}</h3>
-            <h3>OR</h3>
-            <h3>Submit Your Answer</h3>
+            <div>Text Your Answer to: {"TODO PHONE #"}</div>
+            <div>OR</div>
+            <div>Submit Your Answer</div>
             <form onSubmit={handleSubmit} className="form-inline" >
                 <label className="mr-2">What is/are...</label>
                 <input type="text" 

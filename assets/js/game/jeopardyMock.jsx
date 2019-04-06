@@ -1,9 +1,38 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
 import {connect} from 'react-redux';
+import channel from "../channel";
 
-import api from '../api';
+import Board from './board';
+import AnswerQuestion from './answer-question';
+import Players from './players';
+import GameOver from './game-over';
+
+function JeopardyMock(props) {
+    const {name, gameName, session, gameState} = props;
+
+    let body;
+    let number = window.number;
+
+    body = <Board/>;
+    // body = <AnswerQuestion question={gameState.question}/>;
+    // body = <GameOver/>;
+    // body = <div className="text-danger">Something went wrong</div>;
+
+    return <div className="game">
+        <h3>Jeopardy Game: {name}</h3>
+        {body}
+        <Players/>
+    </div>;
+}
+
+
+function stateToProps(state) {
+    return {
+        gameState: state.gameState,
+        gameName: state.gameName,
+        session: state.session
+    };
+}
 
 function Board(props) {
     let {gameState, name, session, dispatch} = props;
@@ -11,20 +40,19 @@ function Board(props) {
     let letters = ["A", "B", "C", "D", "E", "F"];
     let i = 0;
 
-    let board = _.map(gameState.board, function (c, name) {
-        let letter = letters[i];
-        i++;
-        return <Category key={name} category={c} name={name} letter={letter} turn={gameState.turn}/>;
+    let board = _.map(new Array(16), function (x, i) {
+        i = i + 1;
+       return <Category key={i} category={x} name={x} letter={i} turn='1'></Category>
     });
-
+    
     let turn = gameState.turn;
     let answer = function () {
         if (gameState.last_answer.value === "") {
             return <span></span>;
         } else if (gameState.last_answer.correct) {
-            return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}."<br/></span>;
+            return <span>{gameState.turn} correctly answered "{gameState.last_answer.value}"<br/></span>;
         } else {
-            return <span>The correct answer is "{gameState.last_answer.value}."<br/></span>;
+            return <span>The correct answer is "{gameState.last_answer.value}"<br/></span>;
         }
     };
 
@@ -82,4 +110,4 @@ function stateToProps(state) {
     }
 }
 
-export default connect(stateToProps)(Board);
+export default connect(stateToProps)(JeopardyMock);
