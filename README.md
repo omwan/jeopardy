@@ -45,6 +45,11 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Users must be logged in to edit their accounts
   * User passwords must be at least 8 characters long, and contain both upper and lower-case characters, as well as at least one number
 
+### Records
+  * Records represent the results of past games
+  * Records are associated with a user account
+  * If a user deletes their account, associated records will not be deleted to preserve any high scores despite the fact that the user responsible has quit the app
+
 ## Modified Jeopardy Rules
 For ease of implementation, we chose to slightly modify the rules of Jeopardy. 
 
