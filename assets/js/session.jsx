@@ -5,12 +5,12 @@ import _ from "lodash";
 
 import api from './api';
 
-function Header(props) {
+function Session (props) {
     let {session, loginForm, dispatch} = props;
     let sessionInfo = null;
 
     if (session == null) {
-        sessionInfo = <form onSubmit={login} className="session form-inline my-2">
+        sessionInfo = <form onSubmit={login} className="form-inline my-2">
             <input type="email"
                    required
                    className="form-control mr-1"
@@ -25,7 +25,7 @@ function Header(props) {
             <Link to={"/users/new"} className="ml-3">Register</Link>
         </form>;
     } else {
-        sessionInfo = <div className="session my-2">
+        sessionInfo = <div className="my-2">
             <p>
                 Logged in as {session.username} |&nbsp;
                 <Link to={"/users/"+session.user_id+"/edit"}>Edit Account</Link> |&nbsp;
@@ -60,4 +60,4 @@ function stateToProps(state) {
     };
 }
 
-export default connect(stateToProps)(Header);
+export default connect(stateToProps)(Session);

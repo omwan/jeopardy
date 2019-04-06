@@ -8,11 +8,11 @@ $body-color: white;
 @import "board.scss";
 @import "fonts.scss";
 @import "players.scss";
+@import "header.scss";
 
 a {
     color: yellow;
 }
-
 .question {
     text-align: center;
     margin-top: 200px;
