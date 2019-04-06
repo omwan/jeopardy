@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 export default function UserForm(props) {
-  const {title, button, form, onSubmit, update} = props;
+  const {title, button, form, onSubmit, update, onDelete} = props;
 
   return <form onSubmit={onSubmit} className="mb-2">
     <h1>{title}</h1>
@@ -29,5 +29,6 @@ export default function UserForm(props) {
     </div>
     <input type="submit" value={button} className="btn btn-primary" />
     <Link to={"/"} className="btn text-primary ml-1">Back to Lobby</Link>
+    { onDelete ? <button className="btn btn-danger float-right" onClick={onDelete}>Delete Account</button> : false }
   </form>;
 }

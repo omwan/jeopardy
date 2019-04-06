@@ -6,14 +6,16 @@
 }
 
 .player {
-  border: 2px solid white;
+  background-color: rgba(0,0,153,0.5);
+  border: 2px solid black;
   border-radius: 4px;
   padding: 1rem;
   margin: .5rem;
   text-align: center;
   min-width: 20%;
 
-  p {
+  .points {
     margin-bottom: 0;
+    font-family: "Swiss 911";
   }
 }

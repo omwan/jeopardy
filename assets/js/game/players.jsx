@@ -7,7 +7,7 @@ function Players(props) {
     players = _.map(players, function (player, idx) { 
         return <div key={idx} className="player">
             <div className="name">{player.name}</div>
-            <div className="score">{player.score}</div>
+            <div className="score">${player.score}</div>
         </div>; 
     });
 

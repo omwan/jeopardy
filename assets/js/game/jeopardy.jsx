@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import channel from "../channel";
 
+import Joining from './joining';
 import Board from './board';
 import AnswerQuestion from './answer-question';
 import Players from './players';
@@ -11,20 +12,6 @@ function Jeopardy(props) {
     const {name, gameName, session, gameState} = props;
 
     let body;
-    let number = window.number;
-
-    let startGame = function () {
-        channel.push("start", {});
-    };
-
-    let renderJoining = function () {
-        return <div>
-            <div>Text "{name}:&lt;your name&gt;" to {number}</div>
-            <button className="btn btn-primary" onClick={startGame}>
-                Start game
-            </button>
-        </div>;
-    };
 
     if (!session) {
         body = <div>Must be logged in to view game</div>;
@@ -36,7 +23,7 @@ function Jeopardy(props) {
     } else {
         switch (gameState.game_state) {
             case "JOINING":
-                body = renderJoining();
+                body = <Joining />
                 break;
             case "SELECTING":
                 body = <Board board={gameState.board}/>;
@@ -54,7 +41,7 @@ function Jeopardy(props) {
     }
 
     return <div className="game">
-        <h3>Jeopardy Game: {name}</h3>
+        <h3>Game: {name}</h3>
         {body}
         <Players/>
     </div>;

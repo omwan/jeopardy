@@ -6,7 +6,7 @@ defmodule Jeopardy.Repo.Migrations.CreateRecords do
       add :player, :string, null: false
       add :score, :integer, null: false, default: 0
       add :game, :string, null: false
-      add :user_id, references(:users, on_delete: :nilify_all), null: false
+      add :user_id, references(:users, on_delete: :nilify_all)
 
       timestamps()
     end

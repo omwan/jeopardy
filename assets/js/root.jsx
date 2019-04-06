@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import _ from 'lodash';
 import $ from 'jquery';
 
@@ -35,7 +35,10 @@ class Root extends React.Component {
     render() {
         return <div>
             <Router>
-                <Header />
+                <div className="header">
+                    <Link to="/"><span className="logo"/></Link>
+                    <Header />
+                </div>
                 <Alert />
                 <Route path={"/"} exact={true} render={() => {
                     store.dispatch({

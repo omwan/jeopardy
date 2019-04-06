@@ -19,7 +19,7 @@ defmodule Jeopardy.Records do
   """
   def list_records do
     Repo.all from r in Record,
-      order_by: [desc: :updated_at]
+      order_by: [desc: :score]
   end
 
   @doc """
