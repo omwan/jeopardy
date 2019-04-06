@@ -28,6 +28,6 @@ export default function UserForm(props) {
            required />
     </div>
     <input type="submit" value={button} className="btn btn-primary" />
-    <Link to={"/"} className="btn text-primary ml-1">Cancel</Link>
+    <Link to={"/"} className="btn text-primary ml-1">Back to Lobby</Link>
   </form>;
 }
