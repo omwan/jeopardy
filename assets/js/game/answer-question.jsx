@@ -20,9 +20,15 @@ function AnswerQuestion(props) {
     }
 
     return <div>
-        <h4>Question: {question.question}</h4>
-        <h4>Category: {question.category}</h4>
-        <h4>Value: {question.value}</h4>
+        <div className="question">
+            <h4>{question.question}</h4>
+        </div>
+        <div className="question-details question-category">
+            <h4>Category: {question.category}</h4>
+        </div>
+        <div className="question-details question-value">
+            <h4>Value: {question.value}</h4>
+        </div>
         <div className="submission mt-5">
             <h3>Text Your Answer to: {"TODO PHONE #"}</h3>
             <h3>OR</h3>

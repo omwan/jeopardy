@@ -5,18 +5,18 @@ $body-color: white;
 
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
-@import "board.scss";
-@import "fonts.scss";
+@import "game.scss";
 @import "players.scss";
 @import "header.scss";
+@import "fonts.scss";
+
+html, body {
+    background-image: linear-gradient(darkblue, rgb(205,73,130));
+    background-size: cover;
+}
 
 a {
     color: yellow;
-}
-.question {
-    text-align: center;
-    margin-top: 200px;
-    font-family: 'ITC Korinna Std';
 }
 
 .submission {
@@ -26,7 +26,7 @@ a {
     align-items: center;
 }
 
-.game-over {
+.joining, .game-over {
     height: 60vh;
     display: flex;
     flex-direction: column;

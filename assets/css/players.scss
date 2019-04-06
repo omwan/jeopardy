@@ -1,7 +1,7 @@
 .players {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin: 1rem auto;
 }
 
 .player {
@@ -12,7 +12,8 @@
   text-align: center;
   min-width: 20%;
 
-  p {
+  .points {
     margin-bottom: 0;
+    font-family: "Swiss 911";
   }
 }
