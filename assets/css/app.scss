@@ -1,16 +1,35 @@
 /* This file is for your main application css. */
 
-$body-bg: darken(blue, 10%);
+$body-bg: inherit;
 $body-color: white;
 
 @import "fonts.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "alert.scss";
-@import "board.scss";
+@import "game.scss";
 @import "players.scss";
+@import "header.scss";
+@import "fonts.scss";
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    
+    min-height: 100%;
+    height: 100%;
+    height: auto;
+    background-image: linear-gradient(darkblue, rgb(205,73,130));
+    background-size: cover;
+}
 
 body {
-  font-family: "ITC Korinna Std";
+    font-family: "ITC Korinna Std";
+    height: inherit;
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 a {
@@ -76,7 +95,7 @@ a {
     }
 }
 
-.game-over {
+.joining, .game-over {
     height: 60vh;
     display: flex;
     flex-direction: column;
