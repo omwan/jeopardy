@@ -1,17 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Record from './record';
 
 function Records(props) {
-    let {records} = props;
+    let {records, title, id} = props;
 
     let recordList = _.map(records, function (record, ii) {
-        console.log(JSON.stringify(record));
+        if (id && record.user_id != id) {
+            return;
+        }
         return <Record key={ii} record={record}/>;
     });
 
     return <div className="leaderboard-container">
-        <h3>Leaderboard</h3>
+        <h3>{title}</h3>
         <table className="table leaderboard">
             <thead>
             <tr>
@@ -25,6 +26,16 @@ function Records(props) {
             </tbody>
         </table>
     </div>;
+}
+
+function Record(props) {
+    let {record} = props;
+
+    return <tr>
+        <td className="name">{record.player}</td>
+        <td className="score">{record.score}</td>
+        <td className="game">{record.game}</td>
+    </tr>
 }
 
 function stateToProps(state) {

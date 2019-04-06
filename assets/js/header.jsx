@@ -28,7 +28,7 @@ function Header(props) {
         sessionInfo = <div className="session my-2">
             <p>
                 Logged in as {session.username} |&nbsp;
-                <Link to={"/users/"+session.user_id+"/edit"}>Edit Account</Link> |&nbsp;
+                <Link to={"/users/"+session.user_id+"/show"}>Your Account</Link> |&nbsp;
                 <a href="javascript:void(0)" onClick={logout}>Logout</a>
             </p>
         </div>
