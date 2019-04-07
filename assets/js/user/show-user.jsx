@@ -27,10 +27,15 @@ function ShowUser(props) {
     <div className="email">Email: {session.username}</div> 
 
     <div className="row">
-        <Records id={id} title="Game History"/>
+        <div className="col-12 col-lg-8 offset-lg-2">
+            <Records id={id} title="Game History"/>
+        </div>
     </div>
-     <span><Link to={"/users/" + id + "/edit"}>Edit Account</Link> | </span><Link to={"/"} >Back to Lobby</Link>
-
+    <div className="row mt-3">
+        <div className="col">
+            <span><Link to={"/users/" + id + "/edit"}>Edit Account</Link> | </span><Link to={"/"} >&nbsp;Back to Lobby</Link>
+        </div>
+    </div>
   </div>
 }
 

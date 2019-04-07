@@ -28,11 +28,15 @@ function Board(props) {
         }
     };
 
+
+    let number = window.number || "NUMBER";
+
     return <div>
         <div className="state-text">
             {answer()}
             <span>
-                It's {turn}'s turn to pick a question.
+                It's {turn}'s turn to pick a question.<br/>
+                Text "{"<column letter>:<point value>"}" to {number} to pick a question.
             </span>
         </div>
         <div className="board">

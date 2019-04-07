@@ -33,11 +33,15 @@ class Root extends React.Component {
     }
 
     render() {
-        return <div>
+        return <div className="container">
             <Router>
-                <div className="header">
-                    <Link to="/"><span className="logo"/></Link>
-                    <Header />
+                <div className="row">
+                    <div className="col">
+                        <div className="header mb-2">
+                            <Link to="/"><span className="logo"/></Link>
+                            <Header />
+                        </div>
+                    </div>
                 </div>
                 <Alert />
                 <Route path={"/"} exact={true} render={() => {

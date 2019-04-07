@@ -4,15 +4,15 @@ import {connect} from 'react-redux';
 function Records(props) {
     let {records, title, id} = props;
 
-    let recordList = _.map(records, function (record, ii) {
-        if (id && record.user_id != id) {
-            return;
-        }
+    let userRecords = _.filter(records, function(record) {
+        return id && record.user_id == id;
+    })
+    let recordList = _.map(id ? userRecords : records, function (record, ii) {
         return <Record key={ii} record={record}/>;
     });
 
     return <div className="leaderboard-container">
-        <h3>{title}</h3>
+        <h3 className="text-center">{title}</h3>
         <table className="table leaderboard">
             <thead>
             <tr>
@@ -25,6 +25,7 @@ function Records(props) {
             {recordList}
             </tbody>
         </table>
+        {recordList.length ? false : <h5 className="name mt-3 text-center">No games yet!</h5>}
     </div>;
 }
 

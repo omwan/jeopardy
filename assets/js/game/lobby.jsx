@@ -29,12 +29,12 @@ function Lobby(props) {
         </div>
     }
 
-    return <div>
-        <h2>{title}</h2>
-        <div className="row">
-            <div className="col form-group form-inline">
+    return <div className="row mt-3">
+        <div className="col-12 col-lg-6">
+            <h2 className="text-center">{title}</h2>
+            <div className="form-group form-inline justify-content-center">
                 <input type="text"
-                       className="form-control col-md-4 mr-1"
+                       className="form-control mr-1 col-8"
                        placeholder="game name"
                        onChange={update}/>
                 <button className="btn btn-primary"
@@ -44,7 +44,8 @@ function Lobby(props) {
                 </button>
             </div>
         </div>
-        <div className="row">
+
+        <div className="col-12 col-lg-6">
             <Records title="Leaderboard"/>
         </div>
     </div>;

@@ -10,7 +10,7 @@ $body-color: white;
 @import "players.scss";
 @import "user.scss";
 @import "header.scss";
-@import "fonts.scss";
+@import "leaderboard.scss";
 
 * {
     box-sizing: border-box;
@@ -35,18 +35,6 @@ body {
 
 a {
     color: yellow;
-}
-
-.leaderboard-container {
-    font-size: larger;
-    width: 80%;
-    margin-left: 15px;
-}
-
-@media only screen and (min-width: 1000px) {
-    .leaderboard-container {
-        width: 50%;
-    }
 }
 
 .question-details, .leaderboard, .player {
@@ -106,6 +94,5 @@ a {
 }
 
 .state-text {
-    height: 50px;
     margin-bottom: 10px;
 }
