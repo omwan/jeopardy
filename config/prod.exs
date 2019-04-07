@@ -14,7 +14,7 @@ config :jeopardy, JeopardyWeb.Endpoint,
   root: ".",
   version: Application.spec(:phoenix_distillery, :vsn),
   http: [:inet6, port: {:system, "PORT"}],
-  url: [host: "jeopardy.ovmwan.com", port: 80],
+  url: [host: "jeopardy.antarticuno.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
