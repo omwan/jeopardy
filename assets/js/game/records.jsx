@@ -9,7 +9,7 @@ function Records(props) {
     });
 
     return <div className="leaderboard-container">
-        <h3>Leaderboard</h3>
+        <h3 className="text-center">Leaderboard</h3>
         <table className="table leaderboard">
             <thead>
             <tr>
