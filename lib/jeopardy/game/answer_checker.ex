@@ -10,23 +10,39 @@ defmodule Jeopardy.AnswerChecker do
   def majority_match?(test, matched) do
     test
     |> Enum.reduce(0, &(if (Enum.member?(matched, &1)) do &2+1 else &2 end))
-    |> (fn acc -> acc >= ((length(test) + 1)/2) end).()
+    |> majority?(length(matched))
+  end
+
+  def majority?(test_size, actual_size) do
+    floor((actual_size + 1) / 2) <= test_size 
   end
 
   def split_answer(answer) do
     answer
+    |> String.replace_prefix("the ", "")
+    |> String.replace_prefix("a ", "")
+    |> String.replace(", ", " ")
     |> String.replace(",", " ")
+    |> String.replace(".", "")
     |> String.replace("\"", "")
     |> String.replace("\\'", "\'")
+    |> String.replace("&", " ")
+    |> String.replace(" and ", " ")
     |> String.replace("(", "")
     |> String.replace(")", "")
     |> remove_tags
-    |> String.split([" ", "-", "_"])
+    |> String.split([" ", "-", "_", ";", ":"])
+    |> remove_empty_strings
   end
 
   def remove_tags(answer) do
     answer
     |> String.replace(~r/<...>|<..>|<.>/, "")
+  end
+
+  def remove_empty_strings(answer) do
+    answer
+    |> Enum.filter(&(String.length(&1) > 0))
   end
 
 end
