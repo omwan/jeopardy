@@ -17,16 +17,16 @@ class Server {
     handleError(err) {
         store.dispatch({
             type: "NEW_ALERT",
-            data: { 
+            data: {
                 type: "danger",
                 message: err.responseText
             }
         })
     }
 
-    sendPost(path, data, callback) {
+    sendPost(path, data, callback, headers = {}) {
         $.ajax(path, {
-            // headers: {"X-Auth": token}, // TODO
+            headers: headers,
             method: "POST",
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
@@ -36,9 +36,9 @@ class Server {
         });
     }
 
-    sendPatch(path, data, callback) {
+    sendPatch(path, data, callback, headers = {}) {
         $.ajax(path, {
-            // headers: {"X-Auth": token}, // TODO
+            headers: headers,
             method: "patch",
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
@@ -48,9 +48,9 @@ class Server {
         });
     }
 
-    sendDelete(path, callback) {
+    sendDelete(path, callback, headers = {}) {
         $.ajax(path, {
-            // headers: {"X-Auth": token}, // TODO
+            headers: headers,
             method: "DELETE",
             success: callback,
         });
@@ -67,7 +67,7 @@ class Server {
     }
 
     createSession(username, password) {
-        this.sendPost("/api/v1/auth", {username, password}, 
+        this.sendPost("/api/v1/auth", {username, password},
             function (response) {
                 store.dispatch({
                     type: "NEW_SESSION",
@@ -79,7 +79,7 @@ class Server {
     }
 
     deleteSession() {
-        this.sendDelete("/api/v1/auth", function() {
+        this.sendDelete("/api/v1/auth", function () {
             store.dispatch({
                 type: "DELETE_SESSION",
             });
@@ -87,7 +87,7 @@ class Server {
     }
 
     createUser(username, password) {
-        this.sendPost("/api/v1/users", {user: {username, password}}, 
+        this.sendPost("/api/v1/users", {user: {username, password}},
             function (response) {
                 store.dispatch({
                     type: "UPDATE_NEW_USER_FORM",
@@ -101,9 +101,9 @@ class Server {
         );
     }
 
-    updateUser(userid, username, password) {
-        this.sendPatch("/api/v1/users/" + userid, {user: {username, password}}, 
-            function(response) {
+    updateUser(userId, username, password, token) {
+        this.sendPatch(`/api/v1/users/${userId}`, {user: {username, password}},
+            function (response) {
                 store.dispatch({
                     type: "UPDATE_EDIT_USER_FORM",
                     data: {username: "", password: ""}
@@ -112,17 +112,23 @@ class Server {
                     type: "NEW_ALERT",
                     data: {type: "info", message: "Updated user: " + response.data.username}
                 });
+            },
+            {
+                "x-auth": token
             }
         );
     }
 
-    deleteUser(userid) {
-        this.sendDelete("/api/v1/users/" + userid,
-            function(response) {
+    deleteUser(userId, token) {
+        this.sendDelete(`/api/v1/users/${userId}`,
+            function (response) {
                 store.dispatch({
                     type: "NEW_ALERT",
                     data: {type: "info", message: "Deleted user"}
                 });
+            },
+            {
+                "x-auth": token
             });
     }
 
@@ -149,7 +155,7 @@ class Server {
     }
 
     fetchAllRecords() {
-        this.fetchPath("/api/v1/records", function(response) {
+        this.fetchPath("/api/v1/records", function (response) {
             store.dispatch({
                 type: "UPDATE_RECORDS",
                 data: response.data
