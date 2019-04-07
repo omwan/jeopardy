@@ -28,7 +28,12 @@ defmodule Jeopardy.AnswerChecker do
     |> String.replace("\\'", "\'")
     |> String.replace("&", " ")
     |> String.replace(" and ", " ")
+    |> String.replace("%", " percent")
+    |> String.replace("{", "")
+    |> String.replace("}", "")
     |> String.replace("(", "")
+    |> String.replace("[", "")
+    |> String.replace("]", "")
     |> String.replace(")", "")
     |> remove_tags
     |> String.split([" ", "-", "_", ";", ":"])
