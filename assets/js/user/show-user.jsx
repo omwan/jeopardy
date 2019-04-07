@@ -7,7 +7,7 @@ import Records from '../game/records';
 function ShowUser(props) {
   let {id, session, records} = props;
   let edit;
-
+  let title = "Account Info";
   if (!session) {
     return <div>
       <h2>{title}</h2>
