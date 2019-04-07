@@ -13,7 +13,7 @@ function ShowUser(props) {
   }
 
   return <div className="show-user">
-    <h4>Account info:</h4>
+    <h1>Account info:</h1>
     <div className="email">Email: {session.username}</div> 
 
     <div className="row">
