@@ -8,7 +8,7 @@ function ShowUser(props) {
   let {id, session, records} = props;
   let edit;
 
-  if (session.user_id == id) {
+  if (session && session.user_id == id) {
     edit = <span><Link to={"/users/" + session.user_id + "/edit"}>Edit Account</Link> | </span>;
   }
 
