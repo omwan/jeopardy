@@ -10,7 +10,7 @@ function EditUserForm(props) {
 
   function submit(ev) {
     ev.preventDefault();
-    api.updateUser(id, form.username, form.password);
+    api.updateUser(id, form.username, form.password, session.token);
   }
 
   function onMount() {
@@ -29,7 +29,7 @@ function EditUserForm(props) {
 
   function deleteUser(ev) {
     ev.preventDefault();
-    api.deleteUser(id);
+    api.deleteUser(id, session.token);
     api.deleteSession();
   }
 
@@ -40,7 +40,7 @@ function EditUserForm(props) {
     </div>;
   }
 
-  if (session.user_id != id) {
+  if (session.user_id !== id) {
     return <div>
       <h2>{title}</h2>
       <p>You can only edit your own user account.</p>

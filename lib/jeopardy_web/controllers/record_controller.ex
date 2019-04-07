@@ -3,6 +3,7 @@ defmodule JeopardyWeb.RecordController do
 
   alias Jeopardy.Records
   alias Jeopardy.Records.Record
+  alias JeopardyWeb.Plugs.RequireAuth
 
   action_fallback JeopardyWeb.FallbackController
 
@@ -40,4 +41,6 @@ defmodule JeopardyWeb.RecordController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  plug RequireAuth when action in [:create, :update, :delete]
 end
