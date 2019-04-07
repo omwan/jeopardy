@@ -15,6 +15,7 @@ import Jeopardy from './game/jeopardy';
 import Lobby from "./game/lobby";
 import NewUserForm from "./user/new-user-form";
 import EditUserForm from "./user/edit-user-form";
+import ShowUser from "./user/show-user";
 
 export default function root_init(node, store) {
     ReactDOM.render(
@@ -57,6 +58,8 @@ class Root extends React.Component {
                 <Route path={"/users/new"} exact={true} render={() => <NewUserForm />}/>
                 <Route path={"/users/:id/edit"} exact={true} 
                        render={({match}) => <EditUserForm id={match.params.id} />}/>
+                <Route path={"/users/:id/show"} exact={true} 
+                render={({match}) => <ShowUser id={match.params.id} />}/>
             </Router>
         </div>;
     }

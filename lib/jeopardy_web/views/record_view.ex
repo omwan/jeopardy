@@ -16,7 +16,8 @@ defmodule JeopardyWeb.RecordView do
       player: record.player,
       score: record.score,
       game: record.game,
-      timestamp: record.updated_at
+      timestamp: record.updated_at,
+      user_id: record.user_id
     }
   end
 end
