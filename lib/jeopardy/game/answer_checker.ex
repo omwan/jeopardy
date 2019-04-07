@@ -26,6 +26,8 @@ defmodule Jeopardy.AnswerChecker do
     |> String.replace(".", "")
     |> String.replace("\"", "")
     |> String.replace("\\'", "\'")
+    |> String.replace("&", " ")
+    |> String.replace(" and ", " ")
     |> String.replace("(", "")
     |> String.replace(")", "")
     |> remove_tags
