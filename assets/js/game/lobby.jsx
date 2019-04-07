@@ -45,7 +45,7 @@ function Lobby(props) {
             </div>
         </div>
         <div className="row">
-            <Records />
+            <Records title="Leaderboard"/>
         </div>
     </div>;
 }

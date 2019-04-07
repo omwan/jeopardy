@@ -2,14 +2,17 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 function Records(props) {
-    let {records} = props;
+    let {records, title, id} = props;
 
     let recordList = _.map(records, function (record, ii) {
+        if (id && record.user_id != id) {
+            return;
+        }
         return <Record key={ii} record={record}/>;
     });
 
     return <div className="leaderboard-container">
-        <h3>Leaderboard</h3>
+        <h3>{title}</h3>
         <table className="table leaderboard">
             <thead>
             <tr>
