@@ -15,6 +15,7 @@ mix deps.get
 mix compile
 (cd assets && webpack --mode production)
 mix phx.digest
+mix ecto.reset
 
 echo "Generating release..."
 mix release
