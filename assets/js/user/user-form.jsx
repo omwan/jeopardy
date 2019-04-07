@@ -28,7 +28,7 @@ export default function UserForm(props) {
            required />
     </div>
     <input type="submit" value={button} className="btn btn-primary" />
-    <Link to={"/"} className="btn text-primary ml-1">Back to Lobby</Link>
+    <Link to={"/"}>Back to Lobby</Link>
     { onDelete ? <button className="btn btn-danger float-right" onClick={onDelete}>Delete Account</button> : false }
   </form>;
 }
