@@ -40,7 +40,7 @@ function EditUserForm(props) {
     </div>;
   }
 
-  if (session.user_id !== id) {
+  if (session.user_id != id) {
     return <div>
       <h2>{title}</h2>
       <p>You can only edit your own user account.</p>
