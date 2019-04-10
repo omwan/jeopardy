@@ -2,23 +2,24 @@ defmodule Jeopardy.Game do
 
   alias Jeopardy.Game.Board
   alias Jeopardy.Game.Player
+  alias Jeopardy.Game.FinalJeopardy
   alias Jeopardy.AnswerChecker
 
   @num_players 2 # TODO increase this
 
   def new do
     %{
-      turn: "", # username of Player who picks the next question
+      turn: "",           # username of Player who picks the next question
       board: Board.new(), # a Board object
-      question: nil, # the current question, %{category: "", value: ""}
-      completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: %{},
+      question: nil,      # the current question, %{category: "", value: ""}
+      completed: nil,     # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
+      players: %{},       # map of Player objects, keyed by username
       active: false,
       last_answer: %{
         correct: false,
         value: ""
-      }
-      # map of Player objects, keyed by username
+      },
+      final_jeopardy: FinalJeopardy.new()
     }
   end
 
@@ -30,7 +31,8 @@ defmodule Jeopardy.Game do
       question: question_client_view(game, game.question),
       last_answer: game.last_answer,
       board: Board.client_view(game.board, game.completed),
-      players: players_client_view(game.players)
+      players: players_client_view(game.players),
+      final_jeopardy: FinalJeopardy.client_view(game)
     }
   end
 
@@ -214,7 +216,7 @@ defmodule Jeopardy.Game do
   #   GAMEOVER  - game is over
   def get_game_state(game) do
     cond do
-      game_over?(game) -> "GAMEOVER"
+      board_completed?(game) -> "FINAL_CATEGORY"
       answer_time?(game) -> "ANSWERING"
       enough_players?(game) -> "SELECTING"
       true -> "JOINING"
@@ -233,8 +235,12 @@ defmodule Jeopardy.Game do
     game.question != nil && !Enum.any?(game.players, fn {_name, p} -> Player.answered?(p) end)
   end
 
-  def game_over?(game) do
+  def board_completed?(game) do
     Board.all_done?(game.board, game.completed)
+  end
+
+  def game_over?(_game) do
+    false
   end
 
   def coordinate_to_category(game, coordinate) do

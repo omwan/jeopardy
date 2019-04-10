@@ -49,4 +49,9 @@ defmodule Jeopardy.JeopardyAPI do
       get_categories(number-1, tl(body), [hd(body)["category_id"] | acc])
     end
   end
+
+  def get_final_jeopardy do
+    resp = HTTPoison.get!("http://jservice.io/api/random")
+    Jason.decode!(resp.body)
+  end
 end

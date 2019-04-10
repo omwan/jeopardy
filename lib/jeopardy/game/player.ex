@@ -5,14 +5,16 @@ defmodule Jeopardy.Game.Player do
       name: player_name,
       phone_number: number,
       score: 0,
-      answer: ""
+      answer: "",
+      wager: 0
     }
   end
 
   def client_view(player) do
     %{
       name: player.name,
-      score: player.score
+      score: player.score,
+      wager: player.wager
     }
   end
 
