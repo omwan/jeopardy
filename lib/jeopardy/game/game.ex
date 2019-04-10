@@ -9,11 +9,11 @@ defmodule Jeopardy.Game do
 
   def new do
     %{
-      turn: "",           # username of Player who picks the next question
+      turn: "", # username of Player who picks the next question
       board: Board.new(), # a Board object
-      question: nil,      # the current question, %{category: "", value: ""}
-      completed: nil,     # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
-      players: %{},       # map of Player objects, keyed by username
+      question: nil, # the current question, %{category: "", value: ""}
+      completed: nil, # which questions were already answered, in the form: %{"category_1": [200, 400...], "category2": [800], ...}
+      players: %{}, # map of Player objects, keyed by username
       active: false,
       last_answer: %{
         correct: false,
@@ -25,14 +25,14 @@ defmodule Jeopardy.Game do
 
   def client_view(game) do
     %{
-      game_state: get_game_state(game), # one of JOINING, SELECTING, ANSWERING, GAME_OVER
+      game_state: get_game_state(game),
       turn: game.turn,
       winner: get_winner(game),
       question: question_client_view(game, game.question),
       last_answer: game.last_answer,
       board: Board.client_view(game.board, game.completed),
       players: players_client_view(game.players),
-      final_jeopardy: FinalJeopardy.client_view(game)
+      final_jeopardy: FinalJeopardy.client_view(game, get_game_state(game))
     }
   end
 
@@ -207,6 +207,24 @@ defmodule Jeopardy.Game do
     end
   end
 
+  # Final Jeopardy --------------------
+
+  def submit_wager(game, username, wager) do
+    players = game.players
+              |> Enum.map(
+                   fn {name, p} ->
+                     if name == username do
+                       {name, Player.set_wager(p, wager)}
+                     else
+                       {name, p}
+                     end
+                   end
+                 )
+              |> Map.new()
+
+    Map.put(game, :players, players)
+  end
+
   # Game Status ------------------------------------------------------------------------------------
 
   # game state is one one of:
@@ -216,6 +234,8 @@ defmodule Jeopardy.Game do
   #   GAMEOVER  - game is over
   def get_game_state(game) do
     cond do
+      game_over?(game) -> "GAME_OVER"
+#      wagers_submitted?(game) -> "FINAL_QUESTION"
       board_completed?(game) -> "FINAL_CATEGORY"
       answer_time?(game) -> "ANSWERING"
       enough_players?(game) -> "SELECTING"
@@ -236,7 +256,8 @@ defmodule Jeopardy.Game do
   end
 
   def board_completed?(game) do
-    Board.all_done?(game.board, game.completed)
+    map_size(game.players) == @num_players
+    #    Board.all_done?(game.board, game.completed)
   end
 
   def game_over?(_game) do

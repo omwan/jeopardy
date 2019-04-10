@@ -12,6 +12,7 @@ function Jeopardy(props) {
     const {name, gameName, session, gameState} = props;
 
     let body;
+    let state;
 
     if (!session) {
         body = <div>Must be logged in to view game</div>;
@@ -21,6 +22,7 @@ function Jeopardy(props) {
         }
         body = <div>Loading your game</div>;
     } else {
+        state = gameState.game_state
         switch (gameState.game_state) {
             case "JOINING":
                 body = <Joining />
@@ -30,6 +32,9 @@ function Jeopardy(props) {
                 break;
             case "ANSWERING":
                 body = <AnswerQuestion question={gameState.question}/>;
+                break;
+            case "FINAL_CATEGORY":
+                body = <div>{JSON.stringify(gameState.final_jeopardy)}</div>;
                 break;
             case "GAMEOVER":
                 body = <GameOver/>;
@@ -42,7 +47,8 @@ function Jeopardy(props) {
 
     return <div className="game">
         <h3>Game: {name}</h3>
-        {body}
+        <div>{state}</div>
+        <div>{body}</div>
         <Players/>
     </div>;
 }

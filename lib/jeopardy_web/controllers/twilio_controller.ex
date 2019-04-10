@@ -17,19 +17,13 @@ defmodule JeopardyWeb.TwilioController do
           SmsParser.parse_new_question(game, from, body)
         "ANSWERING" ->
           SmsParser.parse_answer_question(game, from, body)
+        "FINAL_CATEGORY" ->
+          SmsParser.parse_wager(game, from, body)
       end
     else
       SmsParser.parse_join_game(from, body)
     end
 
-    response = %{}
-    #    {:ok, twilio_response} = TwilioAPI.send_message(params["From"], params["Body"])
-    #    response = %{
-    #      body: twilio_response.body,
-    #      date_created: twilio_response.date_created,
-    #      to: twilio_response.to,
-    #      from: twilio_response.from
-    #    }
     conn
     |> put_resp_header("content-type", "application/xml")
     |> send_resp(:created, "")

@@ -11,14 +11,14 @@ defmodule Jeopardy.Game.FinalJeopardy do
     }
   end
 
-  def client_view(game) do
+  def client_view(game, game_state) do
     final = game.final_jeopardy
     cv = %{
       category: final.category,
       question: "",
       answer: ""
     }
-    case game.game_state do
+    case game_state do
       "FINAL_CATEGORY" ->
         cv
       "FINAL_QUESTION" ->

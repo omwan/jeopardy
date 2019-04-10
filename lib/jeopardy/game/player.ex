@@ -26,6 +26,10 @@ defmodule Jeopardy.Game.Player do
     Map.put(player, :answer, answer)
   end
 
+  def set_wager(player, wager) do
+    Map.put(player, :wager, wager)
+  end
+
   def add_to_score(player, value) do
     Map.put(player, :score, player.score + value)
   end

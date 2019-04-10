@@ -26,6 +26,13 @@ defmodule Jeopardy.SmsParser do
     GameServer.check_answer(game, username, body)
   end
 
+  def parse_wager(game, from, body) do
+    username = GameServer.get_username_from_phone_number(game, from)
+    with {wager, _} <- Integer.parse(body) do
+      GameServer.submit_wager(game, username, wager)
+    end
+  end
+
   defp valid_coordinate?(coordinate) do
     letters = ["A", "B", "C", "D", "E", "F"]
     index = Enum.find_index(
