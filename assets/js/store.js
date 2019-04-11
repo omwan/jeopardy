@@ -109,7 +109,6 @@ function rootReducer(state, action) {
     });
 
     let newState = reducer(state, action);
-    console.log(newState);
     return deepFreeze(newState);
 }
 

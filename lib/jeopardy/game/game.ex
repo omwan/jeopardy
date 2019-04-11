@@ -212,16 +212,7 @@ defmodule Jeopardy.Game do
 
   def submit_wager(game, username, wager) do
     players = game.players
-              |> Enum.map(
-                   fn {name, p} ->
-                     if name == username do
-                       {name, Player.set_wager(p, wager)}
-                     else
-                       {name, p}
-                     end
-                   end
-                 )
-              |> Map.new()
+              |> Map.put(username, Player.set_wager(game.players[username], wager))
 
     Map.put(game, :players, players)
   end
@@ -276,8 +267,7 @@ defmodule Jeopardy.Game do
   end
 
   def board_completed?(game) do
-    map_size(game.players) == @num_players
-    #    Board.all_done?(game.board, game.completed)
+    Board.all_done?(game.board, game.completed)
   end
 
   def wagers_submitted?(game) do

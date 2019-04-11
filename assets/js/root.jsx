@@ -2,11 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import _ from 'lodash';
-import $ from 'jquery';
 
 import store from './store';
-import channel from './channel';
 import api from './api';
 
 import Alert from './alert';
@@ -49,7 +46,6 @@ class Root extends React.Component {
                         type: "GAME_NAME_SUBMITTED",
                         data: false
                     });
-                    api.fetchAllRecords();
                     return <Lobby/>;
                 }} />
                 <Route path={"/game/:name"} exact={true}

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import api from '../api';
+import FinalJeopardy from "./final-jeopardy";
 
 function GameOver(props) {
     let {gameState} = props;
@@ -11,16 +12,13 @@ function GameOver(props) {
 
     let endGame = function () {
         api.endGame();
-        props.history.push('/'); // redirect to Lobby
+        api.fetchAllRecords();
+        props.history.push('/');
     };
-
-    let finalJeopardy = <div>
-        {JSON.stringify(gameState.final_jeopardy)}
-    </div>;
 
     return <div className="game-over">
         <h3>GAME OVER</h3>
-        {finalJeopardy}
+        <FinalJeopardy/>
         <p>{winner.name} wins!</p>
         <button className="btn btn-primary w-25" onClick={endGame}>Back to Lobby</button>
     </div>;

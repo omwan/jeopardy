@@ -4,7 +4,7 @@ defmodule Jeopardy.Game.Player do
     %{
       name: player_name,
       phone_number: number,
-      score: 500,
+      score: 0,
       answer: "",
       wager: nil
     }

@@ -7,6 +7,7 @@ import Board from './board';
 import AnswerQuestion from './answer-question';
 import Players from './players';
 import GameOver from './game-over';
+import FinalJeopardy from "./final-jeopardy";
 
 function Jeopardy(props) {
     const {name, gameName, session, gameState} = props;
@@ -22,7 +23,6 @@ function Jeopardy(props) {
         }
         body = <div>Loading your game</div>;
     } else {
-        state = gameState.game_state;
         switch (gameState.game_state) {
             case "JOINING":
                 body = <Joining/>;
@@ -35,11 +35,8 @@ function Jeopardy(props) {
                 break;
             case "FINAL_CATEGORY":
             case "FINAL_QUESTION":
-                body = <div>{JSON.stringify(gameState.final_jeopardy)}</div>;
-                break;
             case "FINAL_ANSWER":
-                channel.push("final_complete");
-                body = <div>{JSON.stringify(gameState.final_jeopardy)}</div>;
+                body = <FinalJeopardy />;
                 break;
             case "GAME_OVER":
                 body = <GameOver/>;
@@ -52,7 +49,6 @@ function Jeopardy(props) {
 
     return <div className="game">
         <h3>Game: {name}</h3>
-        <div>{state}</div>
         <div>{body}</div>
         <Players/>
     </div>;
