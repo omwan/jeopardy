@@ -4,9 +4,9 @@ defmodule Jeopardy.Game.Player do
     %{
       name: player_name,
       phone_number: number,
-      score: 0,
+      score: 500,
       answer: "",
-      wager: 0
+      wager: nil
     }
   end
 
@@ -27,10 +27,18 @@ defmodule Jeopardy.Game.Player do
   end
 
   def set_wager(player, wager) do
-    Map.put(player, :wager, wager)
+    if (wager <= player.score) do
+      Map.put(player, :wager, wager)
+    else
+      player
+    end
   end
 
   def add_to_score(player, value) do
     Map.put(player, :score, player.score + value)
+  end
+
+  def subtract_from_score(player, value) do
+    Map.put(player, :score, player.score - value)
   end
 end

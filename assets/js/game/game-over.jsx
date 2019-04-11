@@ -14,8 +14,13 @@ function GameOver(props) {
         props.history.push('/'); // redirect to Lobby
     };
 
+    let finalJeopardy = <div>
+        {JSON.stringify(gameState.final_jeopardy)}
+    </div>;
+
     return <div className="game-over">
         <h3>GAME OVER</h3>
+        {finalJeopardy}
         <p>{winner.name} wins!</p>
         <button className="btn btn-primary w-25" onClick={endGame}>Back to Lobby</button>
     </div>;

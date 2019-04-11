@@ -19,6 +19,8 @@ defmodule JeopardyWeb.TwilioController do
           SmsParser.parse_answer_question(game, from, body)
         "FINAL_CATEGORY" ->
           SmsParser.parse_wager(game, from, body)
+        "FINAL_QUESTION" ->
+          SmsParser.parse_answer_final(game, from, body)
       end
     else
       SmsParser.parse_join_game(from, body)

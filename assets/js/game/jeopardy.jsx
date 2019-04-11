@@ -22,10 +22,10 @@ function Jeopardy(props) {
         }
         body = <div>Loading your game</div>;
     } else {
-        state = gameState.game_state
+        state = gameState.game_state;
         switch (gameState.game_state) {
             case "JOINING":
-                body = <Joining />
+                body = <Joining/>;
                 break;
             case "SELECTING":
                 body = <Board board={gameState.board}/>;
@@ -34,9 +34,14 @@ function Jeopardy(props) {
                 body = <AnswerQuestion question={gameState.question}/>;
                 break;
             case "FINAL_CATEGORY":
+            case "FINAL_QUESTION":
                 body = <div>{JSON.stringify(gameState.final_jeopardy)}</div>;
                 break;
-            case "GAMEOVER":
+            case "FINAL_ANSWER":
+                channel.push("final_complete");
+                body = <div>{JSON.stringify(gameState.final_jeopardy)}</div>;
+                break;
+            case "GAME_OVER":
                 body = <GameOver/>;
                 break;
             default:

@@ -47,7 +47,7 @@ class Channel {
         }
     }
 
-    push(message, body) {
+    push(message, body = {}) {
         console.log("push", message, body);
         switch (message) {
             case "start":

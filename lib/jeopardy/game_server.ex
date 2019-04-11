@@ -89,6 +89,14 @@ defmodule Jeopardy.GameServer do
     GenServer.call(reg(game_name), {:wager, game_name, username, wager})
   end
 
+  def submit_final_answer(game_name, username, answer) do
+    GenServer.call(reg(game_name), {:final_answer, game_name, username, answer})
+  end
+
+  def check_final_answers(game_name) do
+    GenServer.call(reg(game_name), {:check_final, game_name})
+  end
+
   def end_game(game_name, user_id) do
     IO.puts("ending " <> game_name)
     game = get_game(game_name)
@@ -165,6 +173,18 @@ defmodule Jeopardy.GameServer do
   def handle_call({:wager, game_name, username, wager}, _from, _state) do
     game = get_game(game_name)
       |> Game.submit_wager(username, wager)
+    update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:final_answer, game_name, username, answer}, _from, _state) do
+    game = get_game(game_name)
+      |> Game.set_answer(username, answer)
+    update_and_broadcast(game, game_name)
+  end
+
+  def handle_call({:check_final, game_name}, _from, _state) do
+    game = get_game(game_name)
+     |> Game.check_final_answers()
     update_and_broadcast(game, game_name)
   end
   

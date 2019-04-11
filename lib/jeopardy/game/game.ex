@@ -19,7 +19,8 @@ defmodule Jeopardy.Game do
         correct: false,
         value: ""
       },
-      final_jeopardy: FinalJeopardy.new()
+      final_jeopardy: FinalJeopardy.new(),
+      complete: false
     }
   end
 
@@ -225,6 +226,24 @@ defmodule Jeopardy.Game do
     Map.put(game, :players, players)
   end
 
+  def check_final_answers(game) do
+    final_answer = FinalJeopardy.get_answer(game)
+    players = game.players
+              |> Enum.map(fn {n, p} -> {n, update_final_score(p, final_answer)} end)
+              |> Map.new()
+    game
+    |> Map.put(:players, players)
+    |> Map.put(:complete, true)
+  end
+
+  def update_final_score(player, final_answer) do
+    if AnswerChecker.is_correct?(player.answer, final_answer) do
+      Player.add_to_score(player, player.wager)
+    else
+      Player.subtract_from_score(player, player.wager)
+    end
+  end
+
   # Game Status ------------------------------------------------------------------------------------
 
   # game state is one one of:
@@ -235,7 +254,8 @@ defmodule Jeopardy.Game do
   def get_game_state(game) do
     cond do
       game_over?(game) -> "GAME_OVER"
-#      wagers_submitted?(game) -> "FINAL_QUESTION"
+      final_answers_submitted?(game) -> "FINAL_ANSWER"
+      wagers_submitted?(game) -> "FINAL_QUESTION"
       board_completed?(game) -> "FINAL_CATEGORY"
       answer_time?(game) -> "ANSWERING"
       enough_players?(game) -> "SELECTING"
@@ -260,8 +280,20 @@ defmodule Jeopardy.Game do
     #    Board.all_done?(game.board, game.completed)
   end
 
-  def game_over?(_game) do
-    false
+  def wagers_submitted?(game) do
+    wagers = game.players
+             |> Enum.all?(fn {_name, p} -> p.wager end)
+    map_size(game.players) >= @num_players and wagers
+  end
+
+  def final_answers_submitted?(game) do
+    answers_submitted = game.players
+                        |> Enum.all?(fn {_name, p} -> p.answer != "" end)
+    answers_submitted && wagers_submitted?(game)
+  end
+
+  def game_over?(game) do
+    game.complete
   end
 
   def coordinate_to_category(game, coordinate) do

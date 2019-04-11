@@ -7,7 +7,7 @@ function Joining(props) {
   const number = window.number || "PHONE NUMBER";
 
   let startGame = function () {
-    channel.push("start", {});
+    channel.push("start");
   };
 
   return <div className="joining text-center">

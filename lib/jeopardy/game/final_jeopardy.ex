@@ -1,6 +1,7 @@
 defmodule Jeopardy.Game.FinalJeopardy do
 
   alias Jeopardy.JeopardyAPI
+  alias Jeopardy.AnswerChecker
 
   def new do
     final = hd(JeopardyAPI.get_final_jeopardy())
@@ -23,11 +24,16 @@ defmodule Jeopardy.Game.FinalJeopardy do
         cv
       "FINAL_QUESTION" ->
         %{cv | question: final.question}
-      "GAME_OVER" ->
+      game_state when game_state in ["FINAL_ANSWER", "GAME_OVER"] ->
+        answer =
         %{cv | question: final.question, answer: final.answer}
       _ ->
         %{}
     end
+  end
+
+  def get_answer(game) do
+    game.final_jeopardy.answer
   end
 
 end
